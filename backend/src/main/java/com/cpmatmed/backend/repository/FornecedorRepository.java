@@ -1,4 +1,4 @@
-package repository;
+package com.cpmatmed.backend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,23 +1,23 @@
 package com.cpmatmed.backend;
 
+import com.cpmatmed.backend.model.Comprador;
+import com.cpmatmed.backend.model.Fornecedor;
+import com.cpmatmed.backend.model.Pedido;
+import com.cpmatmed.backend.repository.CompradorRepository;
+import com.cpmatmed.backend.repository.FornecedorRepository;
+import com.cpmatmed.backend.repository.PedidoRepository;
+import com.cpmatmed.backend.repository.ProdutoRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import com.cpmatmed.backend.dto.PedidoDTO;
-
-import repository.CompradorRepository;
-import repository.FornecedorRepository;
-import repository.PedidoRepository;
-import repository.ProdutoRepository;
-
-import java.util.List;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@SpringBootTest(classes = TestCpmatmedBackendApplication.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class PedidoRepositoryTest {
 
     @Autowired
@@ -32,8 +32,8 @@ public class PedidoRepositoryTest {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    private com.cpmatmed.backend.model.Comprador comprador;
-    private com.cpmatmed.backend.model.Fornecedor fornecedor;
+    private Comprador comprador;
+    private Fornecedor fornecedor;
 
     @BeforeEach
     void init() {
@@ -42,26 +42,21 @@ public class PedidoRepositoryTest {
         compradorRepository.deleteAll();
         fornecedorRepository.deleteAll();
 
-        comprador = compradorRepository.save(new com.cpmatmed.backend.model.Comprador(null, "Teste Comprador"));
-        fornecedor = fornecedorRepository.save(new com.cpmatmed.backend.model.Fornecedor(null, "Teste Fornecedor"));
+        comprador = compradorRepository.save(new Comprador(null, "Teste Comprador"));
+        fornecedor = fornecedorRepository.save(new Fornecedor(null, "Teste Fornecedor"));
     }
 
     @Test
     void deveSalvarEPesquisarPedido() {
-        com.cpmatmed.backend.model.Pedido pedido = new com.cpmatmed.backend.model.Pedido();
+        Pedido pedido = new Pedido();
         pedido.setComprador(comprador);
         pedido.setFornecedor(fornecedor);
 
-        com.cpmatmed.backend.model.Pedido salvo = pedidoRepository.save(pedido);
-        assertNotNull(((com.cpmatmed.backend.model.Pedido) salvo).getId());
+        Pedido salvo = pedidoRepository.save(pedido);
+        assertNotNull(salvo.getId());
 
-        com.cpmatmed.backend.model.Pedido encontrado = pedidoRepository.findById((Long) salvo.getId()).orElse(null);
+        Pedido encontrado = pedidoRepository.findById(salvo.getId()).orElse(null);
         assertNotNull(encontrado);
         assertEquals("Teste Comprador", encontrado.getComprador().getNome());
     }
-
-	public static MockMvcRequestBuilders findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -10,21 +10,22 @@ import com.cpmatmed.backend.model.Comprador;
 import com.cpmatmed.backend.model.Fornecedor;
 import com.cpmatmed.backend.model.Pedido;
 import com.cpmatmed.backend.model.Produto;
-
-import repository.CompradorRepository;
-import repository.FornecedorRepository;
-import repository.PedidoRepository;
-import repository.ProdutoRepository;
+import com.cpmatmed.backend.repository.CompradorRepository;
+import com.cpmatmed.backend.repository.FornecedorRepository;
+import com.cpmatmed.backend.repository.PedidoRepository;
+import com.cpmatmed.backend.repository.ProdutoRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest
+@SpringBootTest(classes = TestCpmatmedBackendApplication.class)
 @AutoConfigureMockMvc
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class PedidoControllerTest {
 
     @Autowired
@@ -75,7 +76,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveListarProdutosDeUmPedido() throws Exception {
-        Long idPedido = (Long) pedidoRepository.findAll().get(0).getId();
+        Long idPedido = pedidoRepository.findAll().get(0).getId();
 
         mockMvc.perform(get("/api/pedidos/" + idPedido + "/produtos"))
                 .andExpect(status().isOk())
@@ -87,8 +88,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveRetornarNotFoundParaPedidoInexistente() throws Exception {
-        Long idInvalido = 999L;
-        mockMvc.perform(get("/api/pedidos/" + idInvalido + "/produtos"))
+        mockMvc.perform(get("/api/pedidos/999/produtos"))
                 .andExpect(status().isNotFound());
     }
 }

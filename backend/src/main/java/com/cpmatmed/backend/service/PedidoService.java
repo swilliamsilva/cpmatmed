@@ -4,8 +4,7 @@ import com.cpmatmed.backend.dto.PedidoDTO;
 import com.cpmatmed.backend.dto.ProdutoDTO;
 import com.cpmatmed.backend.model.Pedido;
 import com.cpmatmed.backend.model.Produto;
-
-import repository.PedidoRepository;
+import com.cpmatmed.backend.repository.PedidoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +32,6 @@ public class PedidoService {
         }).collect(Collectors.toList());
     }
 
-   
     public List<ProdutoDTO> listarProdutosPorPedido(Long idPedido) {
         Pedido pedido = pedidoRepository.findById(idPedido)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
@@ -46,19 +44,17 @@ public class PedidoService {
                     dto.setValorTotal(produto.getValorTotal());
                     return dto;
                 }).collect(Collectors.toList());
-  //  }
-
-    
-   // public Pedido criarPedido(Pedido pedido) {
-   //     if (pedido.getTotalProdutos() == null || pedido.getTotalProdutos().isEmpty()) {
-   //         throw new IllegalArgumentException("Pedido deve conter ao menos um produto");
-   //     }
-
     }
 
+    public Pedido criarPedido(Pedido pedido) {
+        if (pedido.getProdutos() == null || pedido.getProdutos().isEmpty()) {
+            throw new IllegalArgumentException("Pedido deve conter ao menos um produto");
+        }
 
-	public Pedido criarPedido(Pedido pedido) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        for (Produto produto : pedido.getProdutos()) {
+            produto.setPedido(pedido);
+        }
+
+        return pedidoRepository.save(pedido);
+    }
 }

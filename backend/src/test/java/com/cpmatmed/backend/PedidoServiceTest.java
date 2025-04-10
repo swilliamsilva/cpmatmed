@@ -1,32 +1,24 @@
-package model;
+package com.cpmatmed.backend;
 
 import com.cpmatmed.backend.model.*;
+import com.cpmatmed.backend.repository.CompradorRepository;
+import com.cpmatmed.backend.repository.FornecedorRepository;
+import com.cpmatmed.backend.repository.PedidoRepository;
+import com.cpmatmed.backend.repository.ProdutoRepository;
 import com.cpmatmed.backend.service.PedidoService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import repository.CompradorRepository;
-import repository.FornecedorRepository;
-import repository.PedidoRepository;
-import repository.ProdutoRepository;
 
-import com.cpmatmed.backend.model.Comprador;
-import com.cpmatmed.backend.model.Fornecedor;
-import com.cpmatmed.backend.model.Pedido;
-import com.cpmatmed.backend.model.Produto;
-import com.cpmatmed.backend.service.*;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@SpringBootTest
+@SpringBootTest(classes = TestCpmatmedBackendApplication.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class PedidoServiceTest {
 
     @Autowired
@@ -72,7 +64,6 @@ public class PedidoServiceTest {
 
         assertNotNull(salvo.getId());
         assertEquals(2, salvo.getProdutos().size());
-   //     assertEquals("Amoxicilina", ((Object) ((List) salvo.getProdutos()).get(0)).getNome());
     }
 
     @Test
@@ -80,7 +71,7 @@ public class PedidoServiceTest {
         Pedido pedido = new Pedido();
         pedido.setComprador(comprador);
         pedido.setFornecedor(fornecedor);
-        pedido.setProdutos(List.of()); // vazio
+        pedido.setProdutos(List.of());
 
         Exception ex = assertThrows(IllegalArgumentException.class, () -> {
             pedidoService.criarPedido(pedido);
