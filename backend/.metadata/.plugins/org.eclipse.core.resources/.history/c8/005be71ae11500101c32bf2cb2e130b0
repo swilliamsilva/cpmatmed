@@ -1,0 +1,26 @@
+
+package com.cpmatmed.backend.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Produto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nome;
+    private Integer quantidade;
+    private Double valorUnitario;
+
+    @ManyToOne
+    private Pedido pedido;
+
+    public Double getValorTotal() {
+        return quantidade * valorUnitario;
+    }
+}

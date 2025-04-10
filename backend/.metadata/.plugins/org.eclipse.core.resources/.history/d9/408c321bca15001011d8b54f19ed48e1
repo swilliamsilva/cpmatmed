@@ -1,0 +1,55 @@
+package com.seuprojeto.cpmatmed.repository;
+
+import com.seuprojeto.cpmatmed.model.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@DataJpaTest
+public class PedidoRepositoryTest {
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private CompradorRepository compradorRepository;
+
+    @Autowired
+    private FornecedorRepository fornecedorRepository;
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
+    private Comprador comprador;
+    private Fornecedor fornecedor;
+
+    @BeforeEach
+    void init() {
+        produtoRepository.deleteAll();
+        pedidoRepository.deleteAll();
+        compradorRepository.deleteAll();
+        fornecedorRepository.deleteAll();
+
+        comprador = compradorRepository.save(new Comprador(null, "Teste Comprador"));
+        fornecedor = fornecedorRepository.save(new Fornecedor(null, "Teste Fornecedor"));
+    }
+
+    @Test
+    void deveSalvarEPesquisarPedido() {
+        Pedido pedido = new Pedido();
+        pedido.setComprador(comprador);
+        pedido.setFornecedor(fornecedor);
+
+        Pedido salvo = pedidoRepository.save(pedido);
+        assertNotNull(salvo.getId());
+
+        Pedido encontrado = pedidoRepository.findById(salvo.getId()).orElse(null);
+        assertNotNull(encontrado);
+        assertEquals("Teste Comprador", encontrado.getComprador().getNome());
+    }
+}

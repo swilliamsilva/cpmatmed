@@ -1,0 +1,20 @@
+package com.cpmatmed.backend.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class CorsConfig implements WebMvcConfigurer {
+    
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        // Permitir apenas o frontend de um domínio específico
+        registry.addMapping("/api/**")
+                .allowedOrigins("http://localhost:4200")  // Aqui é o domínio do seu frontend (pode ser o de produção)
+                .allowedMethods("GET", "POST", "PUT", "DELETE")  // Métodos permitidos
+                .allowedHeaders("*")
+                .allowCredentials(true);
+    }
+}

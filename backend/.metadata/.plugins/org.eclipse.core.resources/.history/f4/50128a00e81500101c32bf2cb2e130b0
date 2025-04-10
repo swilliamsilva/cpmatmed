@@ -1,0 +1,19 @@
+
+package com.cpmatmed.backend.dto;
+
+import com.cpmatmed.backend.model.Pedido;
+
+import lombok.Data;
+
+@Data
+public class PedidoDTO {
+    private Long id;
+    private String nomeComprador;
+    private String nomeFornecedor;
+    private Integer totalProdutos;
+    private Double valorTotal;
+	public void setPedido(Pedido pedido) {
+		// TODO Auto-generated method stub
+		
+	}
+}

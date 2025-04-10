@@ -1,0 +1,40 @@
+package com.cpmatmed.backend.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Produto {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nome;
+    private Integer quantidade;
+    private Double precoUnitario;
+
+    @ManyToOne
+    @JoinColumn(name = "pedido_id")
+    private Pedido pedido;
+
+    public Double getValorTotal() {
+        return (quantidade != null && precoUnitario != null)
+                ? quantidade * precoUnitario
+                : 0.0;
+    }
+
+	public void setPedido(Pedido pedido2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Object getQuantidade() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}
