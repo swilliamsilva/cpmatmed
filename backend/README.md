@@ -6,6 +6,7 @@
 Este é o backend do projeto **CPMatMed** (Controle de Pedido de Material e Medicamento).
 O backend foi desenvolvido utilizando Java 17, Spring Boot e Hibernate, 
 com um banco de dados PostgreSQL para persistência. 
+
 O projeto segue a arquitetura RESTful, fornecendo endpoints para
 gestão de pedidos e produtos.
 
@@ -20,12 +21,11 @@ Antes de executar o backend, verifique os seguintes pré-requisitos:
 ## Configuração do Backend
 
 ### Passo 1: Clonar o Repositório
+# O PostgresSQL ele busca de um container docker.
+  pode verificar no docker-compose.yml dentro da aplicação.
 
 Configure o banco de dados PostgreSQL com a seguinte URL de conexão:
-
 Banco de Dados: cpmatmed
-
-
   datasource:
     url: jdbc:postgresql://db:5432/dbpmatmed
     username: postgres
@@ -42,6 +42,10 @@ cd cpmatmed-backend
 
 # Executando o Backend
 Para executar o backend, use o seguinte comando:
+
+mvn spring-boot:run 
+
+ou usando o pacote
 
 java -jar -Dspring.profiles.active=dev target/cpmatmed-backend.jar
 
