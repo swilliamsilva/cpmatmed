@@ -1,0 +1,4 @@
+this.pedidoService.getPedidos().subscribe(data => {
+    this.pedidos = data;
+  });
+  
