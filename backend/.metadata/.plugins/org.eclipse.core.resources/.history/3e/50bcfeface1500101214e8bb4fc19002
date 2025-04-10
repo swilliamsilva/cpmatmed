@@ -1,2 +1,0 @@
-package repository;
-public interface FornecedorRepository extends JpaRepository<Fornecedor, Long> {}

@@ -1,9 +1,0 @@
-package repository;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-// Importar a classe Comprador
-import model.Comprador; // Ajuste o caminho do pacote conforme necessário
-
-public interface CompradorRepository extends JpaRepository<Comprador, Long> {}
-

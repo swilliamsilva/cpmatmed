@@ -1,2 +1,0 @@
-public interface CompradorRepository extends JpaRepository<Comprador, Long> {}
-

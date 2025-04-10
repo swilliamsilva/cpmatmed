@@ -1,7 +1,0 @@
-public class PedidoDTO {
-    private Long id;
-    private String nomeComprador;
-    private String nomeFornecedor;
-    private Integer totalProdutos;
-    private Double valorTotal;
-}

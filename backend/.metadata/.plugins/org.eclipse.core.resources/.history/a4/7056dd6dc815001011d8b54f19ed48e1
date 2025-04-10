@@ -1,5 +1,0 @@
-public class ProdutoDTO {
-    private String nome;
-    private Integer quantidade;
-    private Double valorTotal;
-}
