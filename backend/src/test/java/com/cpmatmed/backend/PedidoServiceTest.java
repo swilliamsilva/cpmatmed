@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = TestCpmatmedBackendApplication.class)
+@SpringBootTest(classes = CpmatmedBackendApplication.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class PedidoServiceTest {
 

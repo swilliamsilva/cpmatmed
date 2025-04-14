@@ -23,7 +23,7 @@ public class PedidoService {
     public List<PedidoDTO> listarPedidos() {
         return pedidoRepository.findAll().stream().map(pedido -> {
             PedidoDTO dto = new PedidoDTO();
-            dto.setId(pedido.getId());
+            dto.setId((Long) pedido.getId());
             dto.setNomeComprador(pedido.getComprador().getNome());
             dto.setNomeFornecedor(pedido.getFornecedor().getNome());
             dto.setTotalProdutos(pedido.getTotalProdutos());

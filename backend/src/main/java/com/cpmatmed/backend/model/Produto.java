@@ -24,19 +24,18 @@ public class Produto {
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
-    public Produto(Object object, String string, int i, double d, Object object2) {
-		// TODO Auto-generated constructor stub
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public Double getValorTotal() {
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
+    public Double getValorTotal() {
         if (quantidade != null && precoUnitario != null) {
             return quantidade * precoUnitario;
         }
         return 0.0;
     }
-
-	public Object getQuantidade() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

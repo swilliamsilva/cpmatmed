@@ -23,7 +23,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest(classes = TestCpmatmedBackendApplication.class)
+@SpringBootTest(classes = CpmatmedBackendApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class PedidoControllerTest {
@@ -76,7 +76,7 @@ public class PedidoControllerTest {
 
     @Test
     void deveListarProdutosDeUmPedido() throws Exception {
-        Long idPedido = pedidoRepository.findAll().get(0).getId();
+        Long idPedido = (Long) pedidoRepository.findAll().get(0).getId();
 
         mockMvc.perform(get("/api/pedidos/" + idPedido + "/produtos"))
                 .andExpect(status().isOk())

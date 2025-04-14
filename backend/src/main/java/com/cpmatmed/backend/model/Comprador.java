@@ -11,7 +11,7 @@ import lombok.*;
 public class Comprador {
 
     public Comprador(Object object, String string) {
-		// TODO Auto-generated constructor stub
+	
 	}
 
 	@Id

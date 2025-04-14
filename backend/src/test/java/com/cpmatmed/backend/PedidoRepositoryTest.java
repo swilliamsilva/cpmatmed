@@ -16,7 +16,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = TestCpmatmedBackendApplication.class)
+@SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class PedidoRepositoryTest {
 

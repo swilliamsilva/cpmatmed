@@ -10,11 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 public class Fornecedor {
 
-    public Fornecedor(Object object, String string) {
-		// TODO Auto-generated constructor stub
-	}
-
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
