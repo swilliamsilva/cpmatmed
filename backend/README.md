@@ -1,66 +1,63 @@
+Backend do Projeto CPMatMed
 
-# Backend do Projeto CPMatMed
+Controle de Pedido de Material e Medicamento
+📝 Descrição
 
-## Descrição
+Este é o backend do sistema CPMatMed, responsável pela gestão de pedidos de materiais e medicamentos.
+O sistema foi desenvolvido em Java 8 com Spring Boot e Hibernate, utilizando PostgreSQL como banco de dados.
 
-Este é o backend do projeto **CPMatMed** (Controle de Pedido de Material e Medicamento).
-O backend foi desenvolvido utilizando Java 17, Spring Boot e Hibernate, 
-com um banco de dados PostgreSQL para persistência. 
+A aplicação segue a arquitetura RESTful, oferecendo endpoints para operações com pedidos e produtos.
+⚙️ Requisitos
 
-O projeto segue a arquitetura RESTful, fornecendo endpoints para
-gestão de pedidos e produtos.
+    Java 8
 
-## Requisitos
+    Maven 3+
 
-Antes de executar o backend, verifique os seguintes pré-requisitos:
+    PostgreSQL instalado localmente e configurado
 
-- **Java 17** ou superior.
-- **Maven** para construção do projeto.
-- **PostgreSQL** configurado e em execução pelo docker.
+    Sistema Operacional: Windows 7
 
-## Configuração do Backend
+💠 Configuração do Banco de Dados
 
-### Passo 1: Clonar o Repositório
-# O PostgresSQL ele busca de um container docker.
-  pode verificar no docker-compose.yml dentro da aplicação.
+Configure o PostgreSQL local com os seguintes dados:
 
-Configure o banco de dados PostgreSQL com a seguinte URL de conexão:
-Banco de Dados: cpmatmed
-  datasource:
-    url: jdbc:postgresql://db:5432/dbpmatmed
-    username: postgres
-    password: postgres
-Para compilar o backend, você pode usar Maven 
+    Banco: cpmatmed
 
-Se estiver usando Maven, execute:
-mvn clean install
+    URL de conexão: jdbc:postgresql://localhost:5432/cpmatmed
 
-Clonando o repositório para seu ambiente local:
+    Usuário: postgres
+
+    Senha: postgres
+
+    ⚠️ Certifique-se de que o banco está criado e acessível antes de executar a aplicação.
+
+🚀 Como Executar
+Clonando o repositório
 
 git clone <URL_DO_REPOSITORIO>
-cd cpmatmed-backend
+cd workspace-cpmatmed/cpmatmed/backend
 
-# Executando o Backend
-Para executar o backend, use o seguinte comando:
+Compilando o projeto
 
-mvn spring-boot:run 
+mvn clean install
 
-ou usando o pacote
+Executando a aplicação
 
-java -jar -Dspring.profiles.active=dev target/cpmatmed-backend.jar
+# Perfil de desenvolvimento
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
 
-API Endpoints
-O backend expõe os seguintes endpoints para interação com o frontend:
-GET /api/pedidos: Retorna uma lista de todos os pedidos.
-GET /api/pedidos/{id}: Retorna os detalhes de um pedido específico, incluindo os produtos.
-POST /api/pedidos: Cria um novo pedido.
+ou
 
-Exemplo de resposta para GET /api/pedidos:
+java -jar -Dspring.profiles.active=dev target/backend-0.0.1-SNAPSHOT.jar
 
-json
-Sempre exibir os detalhes
+🌐 Endpoints da API
+Pedidos
+Método	Endpoint	Descrição
+GET	/api/pedidos	Lista todos os pedidos
+GET	/api/pedidos/{id}	Detalha um pedido e seus produtos
+POST	/api/pedidos	Cria um novo pedido
+Exemplo de resposta (GET /api/pedidos):
 
-Copiar
 [
   {
     "id": 1,
@@ -77,19 +74,75 @@ Copiar
     "valorTotal": 120.0
   }
 ]
-# CORS (Cross-Origin Resource Sharing)
-O CORS está configurado no backend para aceitar requisições de qualquer 
-origem durante o desenvolvimento
- (através da anotação @CrossOrigin(origins = "*")).
 
-Em produção, você deve restringir o CORS para o domínio do frontend. 
-Para isso, edite o código da seguinte forma:
+🌍 CORS
+
+Durante o desenvolvimento, o backend está configurado para aceitar requisições de qualquer origem:
+
+@CrossOrigin(origins = "*")
+
+Para produção, restrinja o acesso conforme necessário, por exemplo:
 
 @CrossOrigin(origins = "http://localhost:4200")
 
-# Contribuição
-Caso deseje contribuir para o projeto, basta seguir as etapas abaixo:
+👥 Contribuição
 
-Faça um fork do repositório.
-Crie uma nova branch para a funcionalidade ou correção.
-Envie um pull request com a descrição da alteração.
+    Faça um fork do repositório
+
+    Crie uma branch para sua feature ou correção
+
+    Envie um Pull Request com a descrição da sua contribuição
+
+🥪 Perfis de Execução
+Ambiente	Banco de Dados	DDL Generation	CORS	Dados Iniciais
+Desenvolvimento	PostgreSQL Local	update	Aberto (*)	schema.sql + data.sql
+Testes	H2 (Memória)	create-drop	Fechado (Mockado)	Automático (via Testes)
+Produção	PostgreSQL Real	validate	Restrito (Configurado)	Flyway ou Liquibase
+📦 Comandos Rápidos
+
+# Desenvolvimento
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Testes
+mvn test -Dspring.profiles.active=test
+
+# Produção
+java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+
+📤 Fluxo de Deploy
+
+    Desenvolvimento:
+
+        Branch: development
+
+        Banco local
+
+        Scripts automáticos (data.sql)
+
+    Testes:
+
+        Branch: test
+
+        Banco H2 em memória
+
+        Testes de integração automatizados
+
+    Produção:
+
+        Branch: production
+
+        Banco real
+
+        Migrações controladas via Flyway ou Liquibase
+
+🔐 Segurança e Boas Práticas
+
+    ⚠️ Nunca deixar senhas hardcoded no código
+
+    Utilize variáveis de ambiente (DB_PASSWORD, etc.)
+
+    Implemente HTTPS no ambiente de produção
+
+    Faça backups regulares de bancos de dados em produção
+
+    Revise as configurações de CORS antes do deploy final

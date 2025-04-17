@@ -1,21 +1,42 @@
 package com.cpmatmed.backend.dto;
 
-import lombok.Data;
+import java.math.BigDecimal;
+import java.util.List;
 
-@Data
 public class PedidoDTO {
+
     private Long id;
+    private Long compradorId;
+    private Long fornecedorId;
     private String nomeComprador;
     private String nomeFornecedor;
     private Integer totalProdutos;
-    private double valorTotal;
+    private BigDecimal valorTotal;
+    private List<ProdutoDTO> produtos;
 
+    // Getters e Setters
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getCompradorId() {
+        return compradorId;
+    }
+
+    public void setCompradorId(Long compradorId) {
+        this.compradorId = compradorId;
+    }
+
+    public Long getFornecedorId() {
+        return fornecedorId;
+    }
+
+    public void setFornecedorId(Long fornecedorId) {
+        this.fornecedorId = fornecedorId;
     }
 
     public String getNomeComprador() {
@@ -42,13 +63,19 @@ public class PedidoDTO {
         this.totalProdutos = totalProdutos;
     }
 
-    public String getNome() {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'getNome'");
+    public BigDecimal getValorTotal() {
+        return valorTotal;
     }
 
-    public int getQuantidade() {
-       
-        throw new UnsupportedOperationException("Unimplemented method 'getQuantidade'");
+    public void setValorTotal(BigDecimal d) {
+        this.valorTotal = d;
+    }
+
+    public List<ProdutoDTO> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(List<ProdutoDTO> produtos) {
+        this.produtos = produtos;
     }
 }

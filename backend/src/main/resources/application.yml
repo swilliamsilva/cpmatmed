@@ -2,20 +2,113 @@ server:
   port: 8080
 
 spring:
+  config:
+    activate:
+      on-profile: default  # Configurações para o perfil default (caso não seja outro perfil)
   application:
     name: cpmatmed-backend
 
   datasource:
-    url: jdbc:postgresql://db:5432/dbpmatmed
+    url: jdbc:postgresql://localhost:5432/dbpmatmed
     username: postgres
-    password: postgres
+    password: SAMUEL
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate # Use validate em produção para garantir que o schema está correto
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+  sql:
+    init:
+      mode: never # Nunca rodar scripts SQL automaticamente em produção
+      encoding: UTF-8
+
+  cors:
+    allowed-origins: "*"
+
+---
+# Configurações específicas para o perfil "dev"
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db_cpmatmed_dev
+    username: postgres
+    password: devpassword  # Troque para uma senha de dev, mais segura que a de produção
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # Durante o desenvolvimento, podemos permitir updates automáticos no schema
+    show-sql: true  # Mostrar SQL no console para depuração
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  sql:
+    init:
+      mode: always # Executar scripts SQL sempre que a aplicação for iniciada em dev
+      encoding: UTF-8
+
+---
+# Configurações específicas para o perfil "test"
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1 # Banco de dados em memória para testes
+    username: sa
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # Criar e dropar o schema para cada teste
     show-sql: true
     properties:
-      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
-      hibernate.format_sql: true
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
 
+  sql:
+    init:
+      mode: always # Iniciar com dados pré-definidos durante os testes
+      encoding: UTF-8
+
+  cors:
+    allowed-origins: "*"
+
+---
+# Configurações específicas para o perfil "prod"
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://prod-server:5432/db_cpmatmed_prod
+    username: postgres
+    password: prodpassword  # Troque para uma senha mais segura de produção
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate # Validar o schema no banco, sem modificá-lo
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+  sql:
+    init:
+      mode: never # Não rodar scripts SQL automaticamente em produção
+      encoding: UTF-8
+
+  cors:
+    allowed-origins: "https://meusite.com"  # Defina os domínios permitidos na produção

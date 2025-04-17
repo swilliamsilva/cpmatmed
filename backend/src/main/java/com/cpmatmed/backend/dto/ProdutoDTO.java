@@ -1,11 +1,23 @@
 package com.cpmatmed.backend.dto;
 
+import java.math.BigDecimal;
+
 public class ProdutoDTO {
+    private Long id;
     private String nome;
-    private int quantidade;
-    private double valorTotal;
+    private Integer quantidade;
+    private BigDecimal precoUnitario;
+    private BigDecimal valorTotal;
 
     // Getters e Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -14,19 +26,27 @@ public class ProdutoDTO {
         this.nome = nome;
     }
 
-    public int getQuantidade() {
+    public Integer getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(int quantidade) {
+    public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
 
-    public double getValorTotal() {
+    public BigDecimal getPrecoUnitario() {
+        return precoUnitario;
+    }
+
+    public void setPrecoUnitario(BigDecimal d) {
+        this.precoUnitario = d;
+    }
+
+    public BigDecimal getValorTotal() {
         return valorTotal;
     }
 
-    public void setValorTotal(double valorTotal) {
-        this.valorTotal = valorTotal;
+    public void setValorTotal(BigDecimal d) {
+        this.valorTotal = d;
     }
 }

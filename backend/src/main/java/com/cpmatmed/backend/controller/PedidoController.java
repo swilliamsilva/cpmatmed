@@ -2,7 +2,6 @@ package com.cpmatmed.backend.controller;
 
 import com.cpmatmed.backend.dto.PedidoDTO;
 import com.cpmatmed.backend.dto.ProdutoDTO;
-import com.cpmatmed.backend.model.Pedido;
 import com.cpmatmed.backend.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,26 +10,39 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/pedidos")
-@CrossOrigin(origins = "*")
+@RequestMapping("/pedidos")
+@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "false")
 public class PedidoController {
 
     @Autowired
     private PedidoService pedidoService;
 
     @GetMapping
-    public List<PedidoDTO> listarPedidos() {
-        return pedidoService.listarPedidos();
+    public List<PedidoDTO> listarTodosPedidos() {
+        return pedidoService.listarTodosPedidos();
     }
 
     @GetMapping("/{id}/produtos")
-    public List<ProdutoDTO> listarProdutosPorPedido(@PathVariable Long id) {
-        return pedidoService.listarProdutosPorPedido(id);
+    public ResponseEntity<List<ProdutoDTO>> listarProdutosDoPedido(@PathVariable Long id) {
+        List<ProdutoDTO> produtos = pedidoService.listarProdutosDoPedido(id);
+        if (produtos.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(produtos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PedidoDTO> buscarPedidoPorId(@PathVariable Long id) {
+        PedidoDTO pedido = pedidoService.buscarPedidoPorId(id);
+        if (pedido == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(pedido);
     }
 
     @PostMapping
-    public ResponseEntity<Pedido> criarPedido(@RequestBody Pedido pedido) {
-        Pedido novoPedido = pedidoService.criarPedido(pedido);
-        return ResponseEntity.ok(novoPedido);
+    public ResponseEntity<PedidoDTO> criarPedido(@RequestBody PedidoDTO pedidoDTO) {
+        PedidoDTO pedidoCriado = pedidoService.criarPedido(pedidoDTO);
+        return ResponseEntity.status(201).body(pedidoCriado);
     }
 }

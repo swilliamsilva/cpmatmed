@@ -1,16 +1,12 @@
 package com.cpmatmed.backend.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-
+import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Pedido {
 
     @Id
@@ -26,15 +22,67 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Produto> produtos = new ArrayList<>();
 
+    public Pedido() {}
+
+    public Pedido(Long id, Comprador comprador, Fornecedor fornecedor, List<Produto> produtos) {
+        this.id = id;
+        this.comprador = comprador;
+        this.fornecedor = fornecedor;
+        this.setProdutos(produtos); // usa o setter para manter o relacionamento correto
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Comprador getComprador() {
+        return comprador;
+    }
+
+    public void setComprador(Comprador comprador) {
+        this.comprador = comprador;
+    }
+
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
+    }
+
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(List<Produto> produtos) {
+        this.produtos.clear();
+        if (produtos != null) {
+            for (Produto produto : produtos) {
+                adicionarProduto(produto);
+            }
+        }
+    }
+
+    public void adicionarProduto(Produto produto) {
+        produto.setPedido(this);
+        this.produtos.add(produto);
+    }
+
     public Integer getTotalProdutos() {
         return produtos.stream()
-                .mapToInt(produto -> produto.getQuantidade() != null ? produto.getQuantidade() : 0)
+                .mapToInt(p -> p.getQuantidade() != null ? p.getQuantidade() : 0)
                 .sum();
     }
 
-    public Double getValorTotal() {
+    public BigDecimal getValorTotal() {
         return produtos.stream()
-                .mapToDouble(produto -> produto.getValorTotal() != null ? produto.getValorTotal() : 0.0)
-                .sum();
+                .map(Produto::getValorTotal)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

@@ -1,60 +1,129 @@
 package com.cpmatmed.backend.service;
 
-import com.cpmatmed.backend.dto.PedidoDTO;
-import com.cpmatmed.backend.dto.ProdutoDTO;
-import com.cpmatmed.backend.model.Pedido;
-import com.cpmatmed.backend.model.Produto;
-import com.cpmatmed.backend.repository.PedidoRepository;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.cpmatmed.backend.dto.PedidoDTO;
+import com.cpmatmed.backend.dto.ProdutoDTO;
+import com.cpmatmed.backend.exception.EntidadeNaoEncontradaException;
+import com.cpmatmed.backend.exception.PedidoNaoEncontradoException;
+import com.cpmatmed.backend.exception.ValidacaoException;
+import com.cpmatmed.backend.mapper.PedidoMapper;
+import com.cpmatmed.backend.mapper.ProdutoMapper;
+import com.cpmatmed.backend.model.Comprador;
+import com.cpmatmed.backend.model.Fornecedor;
+import com.cpmatmed.backend.model.Pedido;
+import com.cpmatmed.backend.model.Produto;
+import com.cpmatmed.backend.repository.CompradorRepository;
+import com.cpmatmed.backend.repository.FornecedorRepository;
+import com.cpmatmed.backend.repository.PedidoRepository;
+import com.cpmatmed.backend.repository.ProdutoRepository;
 
 @Service
 public class PedidoService {
 
+    private final PedidoRepository pedidoRepository;
+    private final CompradorRepository compradorRepository;
+    private final FornecedorRepository fornecedorRepository;
+    private final PedidoMapper pedidoMapper;
+    private final ProdutoRepository produtoRepository;
+    private final ProdutoMapper produtoMapper;
+
     @Autowired
-    private PedidoRepository pedidoRepository;
-
-    public List<PedidoDTO> listarPedidos() {
-        return pedidoRepository.findAll().stream().map(pedido -> {
-            PedidoDTO dto = new PedidoDTO();
-            dto.setId((Long) pedido.getId());
-            dto.setNomeComprador(pedido.getComprador().getNome());
-            dto.setNomeFornecedor(pedido.getFornecedor().getNome());
-            dto.setTotalProdutos(pedido.getTotalProdutos());
-            dto.setValorTotal(pedido.getValorTotal());
-            return dto;
-        }).collect(Collectors.toList());
+    public PedidoService(
+        PedidoRepository pedidoRepository,
+        CompradorRepository compradorRepository,
+        FornecedorRepository fornecedorRepository,
+        PedidoMapper pedidoMapper,
+        ProdutoRepository produtoRepository,
+        ProdutoMapper produtoMapper
+    ) {
+        this.pedidoRepository = pedidoRepository;
+        this.compradorRepository = compradorRepository;
+        this.fornecedorRepository = fornecedorRepository;
+        this.pedidoMapper = pedidoMapper;
+        this.produtoRepository = produtoRepository;
+        this.produtoMapper = produtoMapper;
     }
 
-    public List<ProdutoDTO> listarProdutosPorPedido(Long idPedido) {
-        Pedido pedido = pedidoRepository.findById(idPedido)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
-
-        return pedido.getProdutos().stream()
-                .map(produto -> {
-                    ProdutoDTO dto = new ProdutoDTO();
-                    dto.setNome(produto.getNome());
-                    dto.setQuantidade(produto.getQuantidade());
-                    dto.setValorTotal(produto.getValorTotal());
-                    return dto;
-                }).collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public List<PedidoDTO> listarTodosPedidos() {
+        List<Pedido> pedidos = pedidoRepository.findAll();
+        return pedidoMapper.toPedidoDTOs(pedidos);
     }
 
-    public Pedido criarPedido(Pedido pedido) {
+    @Transactional(readOnly = true)
+    public List<ProdutoDTO> listarProdutosDoPedido(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new PedidoNaoEncontradoException(id));
+
         if (pedido.getProdutos() == null || pedido.getProdutos().isEmpty()) {
-            throw new IllegalArgumentException("Pedido deve conter ao menos um produto");
+            return Collections.emptyList();
         }
 
-        for (Produto produto : pedido.getProdutos()) {
-            produto.setPedido(pedido);
+        return pedidoMapper.toProdutoDTOs(pedido.getProdutos());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProdutoDTO> listarTodosProdutos() {
+        return produtoMapper.toProdutoDTOs(produtoRepository.findAll());
+    }
+
+    @Transactional(readOnly = true)
+    public PedidoDTO buscarPedidoPorId(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new PedidoNaoEncontradoException(id));
+        return pedidoMapper.toPedidoDTO(pedido);
+    }
+
+    @Transactional
+    public PedidoDTO criarPedido(PedidoDTO pedidoDTO) {
+        validarPedidoDTO(pedidoDTO);
+
+        Comprador comprador = compradorRepository.findById(pedidoDTO.getCompradorId())
+                .orElseThrow(() -> new ValidacaoException("Comprador não encontrado com ID: " + pedidoDTO.getCompradorId()));
+
+        Fornecedor fornecedor = fornecedorRepository.findById(pedidoDTO.getFornecedorId())
+                .orElseThrow(() -> new ValidacaoException("Fornecedor não encontrado com ID: " + pedidoDTO.getFornecedorId()));
+
+        Pedido pedido = new Pedido();
+        pedido.setComprador(comprador);
+        pedido.setFornecedor(fornecedor);
+
+        if (pedidoDTO.getProdutos() != null && !pedidoDTO.getProdutos().isEmpty()) {
+            List<Produto> produtos = pedidoDTO.getProdutos().stream()
+                    .map(produtoDTO -> {
+                        Produto produto = new Produto();
+                        produto.setNome(produtoDTO.getNome());
+                        produto.setPrecoUnitario(produtoDTO.getPrecoUnitario());
+                        produto.setQuantidade(produtoDTO.getQuantidade());
+                        produto.setPedido(pedido);
+                        return produto;
+                    }).collect(Collectors.toList());
+            pedido.setProdutos(produtos);
         }
 
-        return pedidoRepository.save(pedido);
+        Pedido pedidoSalvo = pedidoRepository.save(pedido);
+        return pedidoMapper.toPedidoDTO(pedidoSalvo);
+    }
+
+    private void validarPedidoDTO(PedidoDTO pedidoDTO) {
+        if (pedidoDTO.getCompradorId() == null) {
+            throw new ValidacaoException("ID do comprador é obrigatório");
+        }
+        if (pedidoDTO.getFornecedorId() == null) {
+            throw new ValidacaoException("ID do fornecedor é obrigatório");
+        }
+    }
+
+    public Pedido buscarPorId(Long id) {
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Pedido não encontrado"));
     }
 }
