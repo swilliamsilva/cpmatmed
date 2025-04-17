@@ -16,10 +16,9 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Arrays;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 public class PedidoProdutoTests {
 
-    @LocalServerPort // Adicionada a annotation faltante
+    
     private int port;
 
     @Autowired
@@ -48,39 +47,40 @@ public class PedidoProdutoTests {
     @BeforeEach
     void setUp() {
         baseUrl = "http://localhost:" + port + "/api";
-
-        // Restante do código permanece igual...
     }
-
-    // Testes anteriores permanecem iguais...
 
     @Test
     void deveCriarPedidoComSucesso() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
+        // Obtendo IDs de comprador, fornecedor e produto
         Long compradorId = compradorRepository.findAll().get(0).getId();
         Long fornecedorId = fornecedorRepository.findAll().get(0).getId();
         Long produtoId = produtoRepository.findAll().get(0).getId();
 
+        // Criando produto com BigDecimal para valores monetários
         Map<String, Object> produto1 = new HashMap<>();
         produto1.put("id", produtoId);
         produto1.put("nome", "Paracetamol");
         produto1.put("quantidade", 2);
-        produto1.put("precoUnitario", 10.0);
-        produto1.put("valorTotal", 20.0);
+        produto1.put("precoUnitario", BigDecimal.valueOf(10.0));  // Usando BigDecimal
+        produto1.put("valorTotal", BigDecimal.valueOf(20.0));     // Usando BigDecimal
 
+        // Criando DTO do pedido
         Map<String, Object> pedidoDTO = new HashMap<>();
         pedidoDTO.put("compradorId", compradorId);
         pedidoDTO.put("fornecedorId", fornecedorId);
-        pedidoDTO.put("produtos", Collections.singletonList(produto1)); // Corrigido para Java 8
+        pedidoDTO.put("produtos", Collections.singletonList(produto1)); // Ajuste de sintaxe para Java 8
 
+        // Configurando cabeçalhos para requisição
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        // Enviando a requisição POST
         HttpEntity<String> request = new HttpEntity<>(mapper.writeValueAsString(pedidoDTO), headers);
-
         ResponseEntity<String> response = restTemplate.postForEntity(baseUrl + "/pedidos", request, String.class);
 
+        // Verificando se a resposta é o código 201 (Created)
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 }

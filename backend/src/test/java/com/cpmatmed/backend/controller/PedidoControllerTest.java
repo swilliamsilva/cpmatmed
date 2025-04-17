@@ -10,8 +10,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +25,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(PedidoController.class)
+@WebMvcTest(controllers = PedidoController.class,
+    includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = PedidoController.class))
+@ContextConfiguration(classes = {PedidoController.class})
 public class PedidoControllerTest {
 
     @Autowired
@@ -41,8 +47,6 @@ public class PedidoControllerTest {
         produto.setId(1L);
         produto.setNome("Dipirona");
         produto.setQuantidade(10);
-        
-        // Corrigido para BigDecimal
         produto.setPrecoUnitario(new BigDecimal("2.5"));
         produto.setValorTotal(new BigDecimal("25.0"));
 
@@ -53,8 +57,6 @@ public class PedidoControllerTest {
         pedidoDTO.setNomeComprador("Hospital Municipal");
         pedidoDTO.setNomeFornecedor("Fornecedor Teste");
         pedidoDTO.setTotalProdutos(1);
-        
-        // Corrigido para BigDecimal
         pedidoDTO.setValorTotal(new BigDecimal("25.0"));
         pedidoDTO.setProdutos(Collections.singletonList(produto));
     }

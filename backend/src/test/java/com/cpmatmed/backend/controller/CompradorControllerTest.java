@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(CompradorController.class)
+@WebMvcTest(controllers = CompradorController.class)
 public class CompradorControllerTest {
 
     @Autowired
@@ -26,13 +26,18 @@ public class CompradorControllerTest {
 
     @Test
     public void deveListarTodosOsCompradores() throws Exception {
-        CompradorDTO comprador1 = new CompradorDTO(1L, "Maria");
-        CompradorDTO comprador2 = new CompradorDTO(2L, "João");
+        CompradorDTO comprador1 = new CompradorDTO();
+        comprador1.setId(1L);
+        comprador1.setNome("Maria");
+
+        CompradorDTO comprador2 = new CompradorDTO();
+        comprador2.setId(2L);
+        comprador2.setNome("João");
 
         when(compradorService.listarTodos()).thenReturn(Arrays.asList(comprador1, comprador2));
 
         mockMvc.perform(get("/api/compradores")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].nome").value("Maria"))

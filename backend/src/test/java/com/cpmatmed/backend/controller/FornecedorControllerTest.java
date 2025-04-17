@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(FornecedorController.class)
+@WebMvcTest(controllers = FornecedorController.class)
 public class FornecedorControllerTest {
 
     @Autowired
@@ -26,13 +26,18 @@ public class FornecedorControllerTest {
 
     @Test
     public void deveListarTodosOsFornecedores() throws Exception {
-        FornecedorDTO fornecedor1 = new FornecedorDTO(1L, "Fornecedor A");
-        FornecedorDTO fornecedor2 = new FornecedorDTO(2L, "Fornecedor B");
+        FornecedorDTO fornecedor1 = new FornecedorDTO();
+        fornecedor1.setId(1L);
+        fornecedor1.setNome("Fornecedor A");
+
+        FornecedorDTO fornecedor2 = new FornecedorDTO();
+        fornecedor2.setId(2L);
+        fornecedor2.setNome("Fornecedor B");
 
         when(fornecedorService.listarTodos()).thenReturn(Arrays.asList(fornecedor1, fornecedor2));
 
         mockMvc.perform(get("/api/fornecedores")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].nome").value("Fornecedor A"))
