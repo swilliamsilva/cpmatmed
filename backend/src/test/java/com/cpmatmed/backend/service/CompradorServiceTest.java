@@ -1,9 +1,9 @@
 package com.cpmatmed.backend.service;
 
 import com.cpmatmed.backend.dto.CompradorDTO;
-import com.cpmatmed.backend.mapper.CompradorMapper;
 import com.cpmatmed.backend.model.Comprador;
 import com.cpmatmed.backend.repository.CompradorRepository;
+import com.cpmatmed.backend.service.impl.CompradorServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ class CompradorServiceTest {
     @BeforeEach
     void setUp() {
         compradorRepository = mock(CompradorRepository.class);
-        compradorService = new CompradorService(compradorRepository);
+        compradorService = new CompradorServiceImpl(compradorRepository); // ← aqui
     }
 
     @Test

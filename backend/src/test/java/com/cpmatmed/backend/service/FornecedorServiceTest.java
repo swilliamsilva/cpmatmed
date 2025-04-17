@@ -1,9 +1,9 @@
 package com.cpmatmed.backend.service;
 
 import com.cpmatmed.backend.dto.FornecedorDTO;
-import com.cpmatmed.backend.mapper.FornecedorMapper;
 import com.cpmatmed.backend.model.Fornecedor;
 import com.cpmatmed.backend.repository.FornecedorRepository;
+import com.cpmatmed.backend.service.impl.FornecedorServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ class FornecedorServiceTest {
     @BeforeEach
     void setUp() {
         fornecedorRepository = mock(FornecedorRepository.class);
-        fornecedorService = new FornecedorService(fornecedorRepository);
+        fornecedorService = new FornecedorServiceImpl(fornecedorRepository);
     }
 
     @Test

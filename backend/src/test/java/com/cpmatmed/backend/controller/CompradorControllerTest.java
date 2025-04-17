@@ -37,7 +37,7 @@ public class CompradorControllerTest {
         when(compradorService.listarTodos()).thenReturn(Arrays.asList(comprador1, comprador2));
 
         mockMvc.perform(get("/api/compradores")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].nome").value("Maria"))

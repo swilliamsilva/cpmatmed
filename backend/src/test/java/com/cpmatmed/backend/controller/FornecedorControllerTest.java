@@ -26,21 +26,16 @@ public class FornecedorControllerTest {
 
     @Test
     public void deveListarTodosOsFornecedores() throws Exception {
-        FornecedorDTO fornecedor1 = new FornecedorDTO();
-        fornecedor1.setId(1L);
-        fornecedor1.setNome("Fornecedor A");
-
-        FornecedorDTO fornecedor2 = new FornecedorDTO();
-        fornecedor2.setId(2L);
-        fornecedor2.setNome("Fornecedor B");
+        FornecedorDTO fornecedor1 = new FornecedorDTO(1L, "Farmácia Central");
+        FornecedorDTO fornecedor2 = new FornecedorDTO(2L, "Drogaria Boa Saúde");
 
         when(fornecedorService.listarTodos()).thenReturn(Arrays.asList(fornecedor1, fornecedor2));
 
         mockMvc.perform(get("/api/fornecedores")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].nome").value("Fornecedor A"))
-                .andExpect(jsonPath("$[1].nome").value("Fornecedor B"));
+                .andExpect(jsonPath("$[0].nome").value("Farmácia Central"))
+                .andExpect(jsonPath("$[1].nome").value("Drogaria Boa Saúde"));
     }
 }
