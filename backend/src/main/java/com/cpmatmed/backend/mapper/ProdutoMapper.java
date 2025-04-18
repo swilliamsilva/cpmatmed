@@ -1,44 +1,45 @@
+
 package com.cpmatmed.backend.mapper;
+
+import java.math.BigDecimal;
+
+import org.springframework.stereotype.Component;
 
 import com.cpmatmed.backend.dto.ProdutoDTO;
 import com.cpmatmed.backend.model.Produto;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class ProdutoMapper {
 
-    public ProdutoDTO toDTO(Produto produto) {
+	// Método estático para conversão de Produto para ProdutoDTO
+    public static ProdutoDTO toDTO(Produto produto) {
+        if (produto == null) return null;
+
         ProdutoDTO dto = new ProdutoDTO();
         dto.setId(produto.getId());
         dto.setNome(produto.getNome());
         dto.setQuantidade(produto.getQuantidade());
         dto.setPrecoUnitario(produto.getPrecoUnitario());
-        dto.setValorTotal(produto.getValorTotal()); // calculado no getter da entidade
+        dto.setValorTotal(produto.getValorTotal());
+        
+       
+        if (produto.getPedido() != null && produto.getPedido().getFornecedor() != null) {
+            dto.setFornecedorId(produto.getPedido().getFornecedor().getId());
+        }
+        
         return dto;
     }
-
-    public Produto toEntity(ProdutoDTO dto) {
+    public static Produto toEntity(ProdutoDTO dto) {
+ 
+        if (dto == null) return null;
         Produto produto = new Produto();
         produto.setId(dto.getId());
         produto.setNome(dto.getNome());
         produto.setQuantidade(dto.getQuantidade());
         produto.setPrecoUnitario(dto.getPrecoUnitario());
-        // valorTotal será calculado automaticamente via getValorTotal()
+        
+     // Calcula valorTotal automaticamente
+        BigDecimal valorTotal = dto.getPrecoUnitario().multiply(BigDecimal.valueOf(dto.getQuantidade()));
         return produto;
-    }
-
-    public List<ProdutoDTO> toProdutoDTOs(List<Produto> produtos) {
-        return produtos.stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    public List<Produto> toProdutoEntities(List<ProdutoDTO> dtos) {
-        return dtos.stream()
-                .map(this::toEntity)
-                .collect(Collectors.toList());
     }
 }

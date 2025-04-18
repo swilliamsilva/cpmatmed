@@ -1,11 +1,13 @@
 package com.cpmatmed.backend.service;
 
-import com.cpmatmed.backend.dto.ProdutoDTO;
-import com.cpmatmed.backend.exception.PedidoNaoEncontradoException;
-import com.cpmatmed.backend.model.Pedido;
-import com.cpmatmed.backend.model.Produto;
-import com.cpmatmed.backend.repository.PedidoRepository;
-import com.cpmatmed.backend.service.PedidoService;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,14 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import com.cpmatmed.backend.dto.ProdutoDTO;
+import com.cpmatmed.backend.exception.PedidoNaoEncontradoException;
+import com.cpmatmed.backend.model.Pedido;
+import com.cpmatmed.backend.model.Produto;
+import com.cpmatmed.backend.repository.PedidoRepository;
 
 @RunWith(MockitoJUnitRunner.class) // Habilita o Mockito com JUnit 4
 public class PedidoServiceTest {

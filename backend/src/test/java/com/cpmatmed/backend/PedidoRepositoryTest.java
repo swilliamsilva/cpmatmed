@@ -1,12 +1,8 @@
 package com.cpmatmed.backend;
 
-import com.cpmatmed.backend.model.Comprador;
-import com.cpmatmed.backend.model.Fornecedor;
-import com.cpmatmed.backend.model.Pedido;
-import com.cpmatmed.backend.repository.CompradorRepository;
-import com.cpmatmed.backend.repository.FornecedorRepository;
-import com.cpmatmed.backend.repository.PedidoRepository;
-import com.cpmatmed.backend.repository.ProdutoRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +10,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.cpmatmed.backend.model.Comprador;
+import com.cpmatmed.backend.model.Fornecedor;
+import com.cpmatmed.backend.model.Pedido;
+import com.cpmatmed.backend.repository.CompradorRepository;
+import com.cpmatmed.backend.repository.FornecedorRepository;
+import com.cpmatmed.backend.repository.PedidoRepository;
+import com.cpmatmed.backend.repository.ProdutoRepository;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)

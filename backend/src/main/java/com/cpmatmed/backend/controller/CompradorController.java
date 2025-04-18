@@ -1,12 +1,16 @@
 package com.cpmatmed.backend.controller;
 
-import com.cpmatmed.backend.dto.CompradorDTO;
-import com.cpmatmed.backend.service.CompradorService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.cpmatmed.backend.dto.CompradorDTO;
+import com.cpmatmed.backend.service.CompradorService;
 
 @RestController
 @RequestMapping("/api/compradores")

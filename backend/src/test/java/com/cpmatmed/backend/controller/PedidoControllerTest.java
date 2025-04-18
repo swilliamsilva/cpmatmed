@@ -1,9 +1,15 @@
 package com.cpmatmed.backend.controller;
 
-import com.cpmatmed.backend.dto.PedidoDTO;
-import com.cpmatmed.backend.dto.ProdutoDTO;
-import com.cpmatmed.backend.service.PedidoService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,14 +22,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.cpmatmed.backend.dto.PedidoDTO;
+import com.cpmatmed.backend.dto.ProdutoDTO;
+import com.cpmatmed.backend.service.PedidoService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(controllers = PedidoController.class,
     includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = PedidoController.class))

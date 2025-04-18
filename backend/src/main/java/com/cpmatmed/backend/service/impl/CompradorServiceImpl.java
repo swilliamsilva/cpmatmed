@@ -1,13 +1,15 @@
 package com.cpmatmed.backend.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.cpmatmed.backend.dto.CompradorDTO;
 import com.cpmatmed.backend.mapper.CompradorMapper;
 import com.cpmatmed.backend.repository.CompradorRepository;
 import com.cpmatmed.backend.service.CompradorService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CompradorServiceImpl implements CompradorService {
@@ -21,6 +23,29 @@ public class CompradorServiceImpl implements CompradorService {
 
     @Override
     public List<CompradorDTO> listarTodos() {
-        return CompradorMapper.toDTOs(compradorRepository.findAll());
+        return compradorRepository.findAll().stream()
+                .map(CompradorMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public CompradorDTO salvar(CompradorDTO compradorDTO) {
+        return CompradorMapper.toDTO(
+                compradorRepository.save(
+                        CompradorMapper.fromIdAndNome(compradorDTO.getId(), compradorDTO.getNome())
+                )
+        );
+    }
+
+    @Override
+    public CompradorDTO buscarPorId(Long id) {
+        return compradorRepository.findById(id)
+                .map(CompradorMapper::toDTO)
+                .orElse(null);
+    }
+
+    @Override
+    public void deletar(Long id) {
+        compradorRepository.deleteById(id);
     }
 }
