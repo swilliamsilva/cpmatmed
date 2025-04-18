@@ -10,15 +10,17 @@ public class PedidoDTO {
     private Long fornecedorId;
     private String nomeComprador;
     private String nomeFornecedor;
-    private List<ProdutoDTO> produtos;
-    private Integer totalProdutos;
-    private BigDecimal valorTotal;
     private String descricao;
+    private List<ProdutoDTO> produtos;
+    private Integer totalProdutos;  // Este campo é calculado dinamicamente
+    private BigDecimal valorTotal;  // Este campo é calculado dinamicamente
 
-    public PedidoDTO() {}
+    public PedidoDTO() {
+    }
 
-    public PedidoDTO(Long id, Long compradorId, Long fornecedorId, String nomeComprador, String nomeFornecedor,
-                     List<ProdutoDTO> produtos, Integer totalProdutos, BigDecimal valorTotal) {
+    public PedidoDTO(Long id, Long compradorId, Long fornecedorId, String nomeComprador,
+                     String nomeFornecedor, List<ProdutoDTO> produtos, Integer totalProdutos,
+                     BigDecimal valorTotal) {
         this.id = id;
         this.compradorId = compradorId;
         this.fornecedorId = fornecedorId;
@@ -29,30 +31,77 @@ public class PedidoDTO {
         this.valorTotal = valorTotal;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // Getters e Setters
 
-    public Long getCompradorId() { return compradorId; }
-    public void setCompradorId(Long compradorId) { this.compradorId = compradorId; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getFornecedorId() { return fornecedorId; }
-    public void setFornecedorId(Long fornecedorId) { this.fornecedorId = fornecedorId; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getNomeComprador() { return nomeComprador; }
-    public void setNomeComprador(String nomeComprador) { this.nomeComprador = nomeComprador; }
+    public Long getCompradorId() {
+        return compradorId;
+    }
 
-    public String getNomeFornecedor() { return nomeFornecedor; }
-    public void setNomeFornecedor(String nomeFornecedor) { this.nomeFornecedor = nomeFornecedor; }
+    public void setCompradorId(Long compradorId) {
+        this.compradorId = compradorId;
+    }
 
-    public List<ProdutoDTO> getProdutos() { return produtos; }
-    public void setProdutos(List<ProdutoDTO> produtos) { this.produtos = produtos; }
+    public Long getFornecedorId() {
+        return fornecedorId;
+    }
 
-    public Integer getTotalProdutos() { return totalProdutos; }
-    public void setTotalProdutos(Integer totalProdutos) { this.totalProdutos = totalProdutos; }
+    public void setFornecedorId(Long fornecedorId) {
+        this.fornecedorId = fornecedorId;
+    }
 
-    public BigDecimal getValorTotal() { return valorTotal; }
-    public void setValorTotal(BigDecimal valorTotal) { this.valorTotal = valorTotal; }
+    public String getNomeComprador() {
+        return nomeComprador;
+    }
 
-    public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public void setNomeComprador(String nomeComprador) {
+        this.nomeComprador = nomeComprador;
+    }
+
+    public String getNomeFornecedor() {
+        return nomeFornecedor;
+    }
+
+    public void setNomeFornecedor(String nomeFornecedor) {
+        this.nomeFornecedor = nomeFornecedor;
+    }
+
+    public List<ProdutoDTO> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(List<ProdutoDTO> produtos) {
+        this.produtos = produtos;
+    }
+
+    public Integer getTotalProdutos() {
+        return totalProdutos;
+    }
+
+    public void setTotalProdutos(Integer totalProdutos) {
+        this.totalProdutos = totalProdutos;
+    }
+
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 }

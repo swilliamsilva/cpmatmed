@@ -11,6 +11,18 @@ public class ProdutoDTO {
     private BigDecimal valorTotal;
     private Long fornecedorId;
 
+    public ProdutoDTO() {
+    }
+
+    public ProdutoDTO(Long id, String nome, int quantidade, BigDecimal precoUnitario, BigDecimal valorTotal, Long fornecedorId) {
+        this.id = id;
+        this.nome = nome;
+        this.quantidade = quantidade;
+        this.precoUnitario = precoUnitario;
+        this.valorTotal = valorTotal;
+        this.fornecedorId = fornecedorId;
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

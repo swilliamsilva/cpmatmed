@@ -1,4 +1,3 @@
-
 package com.cpmatmed.backend.mapper;
 
 import java.math.BigDecimal;
@@ -11,7 +10,6 @@ import com.cpmatmed.backend.model.Produto;
 @Component
 public class ProdutoMapper {
 
-	// Método estático para conversão de Produto para ProdutoDTO
     public static ProdutoDTO toDTO(Produto produto) {
         if (produto == null) return null;
 
@@ -20,26 +18,31 @@ public class ProdutoMapper {
         dto.setNome(produto.getNome());
         dto.setQuantidade(produto.getQuantidade());
         dto.setPrecoUnitario(produto.getPrecoUnitario());
-        dto.setValorTotal(produto.getValorTotal());
-        
-       
+
+        // Calcula o valorTotal dinamicamente
+        if (produto.getPrecoUnitario() != null && produto.getQuantidade() > 0) {
+            BigDecimal valorTotal = produto.getPrecoUnitario().multiply(BigDecimal.valueOf(produto.getQuantidade()));
+            dto.setValorTotal(valorTotal);
+        }
+
         if (produto.getPedido() != null && produto.getPedido().getFornecedor() != null) {
             dto.setFornecedorId(produto.getPedido().getFornecedor().getId());
         }
-        
+
         return dto;
     }
+
     public static Produto toEntity(ProdutoDTO dto) {
- 
         if (dto == null) return null;
+
         Produto produto = new Produto();
         produto.setId(dto.getId());
         produto.setNome(dto.getNome());
         produto.setQuantidade(dto.getQuantidade());
         produto.setPrecoUnitario(dto.getPrecoUnitario());
-        
-     // Calcula valorTotal automaticamente
-        BigDecimal valorTotal = dto.getPrecoUnitario().multiply(BigDecimal.valueOf(dto.getQuantidade()));
+
+        // Não é necessário setar valorTotal na entidade
+
         return produto;
     }
 }

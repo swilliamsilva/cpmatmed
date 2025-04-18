@@ -1,5 +1,6 @@
 package com.cpmatmed.backend.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,14 @@ public class PedidoMapper {
                 .map(ProdutoMapper::toDTO)
                 .collect(Collectors.toList());
 
+        int totalProdutos = produtosDTO.stream()
+                .mapToInt(ProdutoDTO::getQuantidade)
+                .sum();
+
+        BigDecimal valorTotal = produtosDTO.stream()
+                .map(ProdutoDTO::getValorTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
         return new PedidoDTO(
                 pedido.getId(),
                 pedido.getComprador().getId(),
@@ -24,8 +33,8 @@ public class PedidoMapper {
                 pedido.getComprador().getNome(),
                 pedido.getFornecedor().getNome(),
                 produtosDTO,
-                pedido.getTotalProdutos(),
-                pedido.getValorTotal()
+                totalProdutos,
+                valorTotal
         );
     }
 
@@ -40,6 +49,7 @@ public class PedidoMapper {
         List<Produto> produtos = dto.getProdutos().stream()
                 .map(ProdutoMapper::toEntity)
                 .collect(Collectors.toList());
+
         pedido.setProdutos(produtos);
         return pedido;
     }
