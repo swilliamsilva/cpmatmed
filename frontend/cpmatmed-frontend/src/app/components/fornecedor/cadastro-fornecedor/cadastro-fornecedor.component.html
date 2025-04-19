@@ -1,0 +1,11 @@
+<h2>{{ fornecedor.id ? 'Editar' : 'Novo' }} Fornecedor</h2>
+
+<form (ngSubmit)="salvar()">
+  <div class="form-group">
+    <label>Nome:</label>
+    <input [(ngModel)]="fornecedor.nome" name="nome" class="form-control" required />
+  </div>
+
+  <button type="submit" class="btn btn-success">Salvar</button>
+  <a routerLink="/fornecedor/lista-fornecedor" class="btn btn-secondary">Cancelar</a>
+</form>

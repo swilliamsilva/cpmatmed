@@ -1,0 +1,10 @@
+// src/styles.scss
+
+$verde-escuro: #006400;
+$verde-claro: #66c2a5;
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: $verde-claro;
+  color: $verde-escuro;
+}

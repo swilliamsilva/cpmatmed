@@ -1,0 +1,48 @@
+<div class="app-container">
+  <aside class="sidebar">
+    <h2 class="app-title">Controle de Pedidos de Material e Medicamentos</h2>
+    <nav class="nav-menu">
+      <ul>
+        <!-- Pedidos -->
+        <li>
+          <strong>Pedidos</strong>
+          <ul>
+            <li><a routerLink="/pedido/lista-pedido">Lista de Pedidos</a></li>
+            <li><a routerLink="/pedido/cadastro-pedido">Novo Pedido</a></li>
+          </ul>
+        </li>
+        <!-- Compradores -->
+        <li>
+          <strong>Compradores</strong>
+          <ul>
+            <li><a routerLink="/comprador/lista-comprador">Lista de Compradores</a></li>
+            <li><a routerLink="/comprador/cadastro-comprador">Novo Comprador</a></li>
+          </ul>
+        </li>
+        <!-- Fornecedores -->
+        <li>
+          <strong>Fornecedores</strong>
+          <ul>
+            <li><a routerLink="/fornecedor/lista-fornecedor">Lista de Fornecedores</a></li>
+            <li><a routerLink="/fornecedor/cadastro-fornecedor">Novo Fornecedor</a></li>
+          </ul>
+        </li>
+        <!-- Produtos -->
+        <li>
+          <strong>Produtos</strong>
+          <ul>
+            <li><a routerLink="/produtos">Lista de Produtos</a></li>
+            <li><a routerLink="/produtos/novo">Novo Produto</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+    <footer class="footer">
+      <span>&copy; {{ currentYear }} - Versão 1.0</span>
+    </footer>
+  </main>
+</div>

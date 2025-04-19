@@ -1,0 +1,27 @@
+<div class="container">
+  <h3>Lista de Produtos</h3>
+  <button routerLink="/produto/cadastro-produto" class="btn btn-success mb-3">Novo Produto</button>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Quantidade</th>
+        <th>Preço Unitário</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let produto of produtos">
+        <td>{{ produto.id }}</td>
+        <td>{{ produto.nome }}</td>
+        <td>{{ produto.quantidade }}</td>
+        <td>R$ {{ produto.precoUnitario | number:'1.2-2' }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm" (click)="editarProduto(produto.id!)">Editar</button>
+          <button class="btn btn-danger btn-sm" (click)="excluirProduto(produto.id!)">Excluir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
