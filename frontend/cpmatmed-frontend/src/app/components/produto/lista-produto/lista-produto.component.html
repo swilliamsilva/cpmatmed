@@ -18,9 +18,16 @@
         <td>{{ produto.quantidade }}</td>
         <td>R$ {{ produto.precoUnitario | number:'1.2-2' }}</td>
         <td>
-          <button class="btn btn-primary btn-sm" (click)="editarProduto(produto.id!)">Editar</button>
-          <button class="btn btn-danger btn-sm" (click)="excluirProduto(produto.id!)">Excluir</button>
+          <button class="btn btn-primary btn-sm" (click)="editarProduto(produto.id)">
+            ✏️ Editar
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="excluirProduto(produto.id)">
+            🗑️ Excluir
+          </button>
         </td>
+      </tr>
+      <tr *ngIf="produtos.length === 0">
+        <td colspan="5" class="text-center">Nenhum produto cadastrado.</td>
       </tr>
     </tbody>
   </table>

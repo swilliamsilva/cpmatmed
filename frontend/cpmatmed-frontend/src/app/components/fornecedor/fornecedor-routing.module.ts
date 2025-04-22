@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CadastroFornecedorComponent } from './cadastro-fornecedor/cadastro-fornecedor.component';
 import { ListaFornecedorComponent } from './lista-fornecedor/lista-fornecedor.component';
+import { DetalheFornecedorComponent } from './detalhe-fornecedor/detalhe-fornecedor.component';
 
 const routes: Routes = [
-  { path: 'fornecedor/lista-fornecedor', component: ListaFornecedorComponent },
-  { path: 'fornecedor/cadastro-fornecedor', component: CadastroFornecedorComponent },
-  { path: 'fornecedor/cadastro-fornecedor/:id', component: CadastroFornecedorComponent }
+  { path: 'cadastro-fornecedor', component: CadastroFornecedorComponent },
+  { path: 'lista-fornecedor', component: ListaFornecedorComponent },
+  { path: 'detalhes-fornecedor/:id', component: DetalheFornecedorComponent }
 ];
 
 @NgModule({

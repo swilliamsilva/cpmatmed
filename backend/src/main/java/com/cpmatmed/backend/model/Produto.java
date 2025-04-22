@@ -1,14 +1,7 @@
 package com.cpmatmed.backend.model;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class Produto {
@@ -18,6 +11,7 @@ public class Produto {
     private Long id;
 
     private String nome;
+    private String descricao; // CAMPO ADICIONADO
     private Integer quantidade;
 
     @Column(precision = 10, scale = 2)
@@ -27,23 +21,35 @@ public class Produto {
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
+    // Construtores atualizados
     public Produto() {}
 
-    public Produto(String nome, Integer quantidade, BigDecimal precoUnitario, Pedido pedido) {
+    public Produto(String nome, String descricao, Integer quantidade, BigDecimal precoUnitario, Pedido pedido) {
         this.nome = nome;
+        this.descricao = descricao;
         this.quantidade = quantidade;
         this.precoUnitario = precoUnitario;
         this.pedido = pedido;
     }
 
-    public Produto(Long id, String nome, Integer quantidade, BigDecimal precoUnitario) {
+    public Produto(Long id, String nome, String descricao, Integer quantidade, BigDecimal precoUnitario) {
         this.id = id;
         this.nome = nome;
+        this.descricao = descricao;
         this.quantidade = quantidade;
         this.precoUnitario = precoUnitario;
     }
 
-    // Getters e Setters
+    // Getters e Setters para o novo campo
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -54,9 +60,7 @@ public class Produto {
     public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
 
     public BigDecimal getPrecoUnitario() { return precoUnitario; }
-    public void setPrecoUnitario(BigDecimal precoUnitario) { 
-        this.precoUnitario = precoUnitario; 
-    }
+    public void setPrecoUnitario(BigDecimal precoUnitario) { this.precoUnitario = precoUnitario; }
 
     public Pedido getPedido() { return pedido; }
     public void setPedido(Pedido pedido) { this.pedido = pedido; }

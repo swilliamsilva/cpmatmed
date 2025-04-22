@@ -1,17 +1,12 @@
 package com.cpmatmed.backend.service;
 
+import com.cpmatmed.backend.dto.*;
+
 import java.util.List;
 
-import com.cpmatmed.backend.dto.PedidoDTO;
-import com.cpmatmed.backend.dto.ProdutoDTO;
-
-public interface PedidoService {
-
-    List<PedidoDTO> listarTodosPedidos();
-
-    PedidoDTO buscarPedidoPorId(Long id);
-
-    List<ProdutoDTO> listarProdutosDoPedido(Long id);
-
-    PedidoDTO criarPedido(PedidoDTO pedidoDTO);
+public interface PedidoService { // Nome exato da interface
+    PedidoResponse salvarPedido(PedidoRequest pedidoRequest);
+    List<PedidoResponse> listarPedidos(); // Nome do método igual na implementação
+    PedidoResponse buscarPedidoPorId(Long id);
+    void deletarPedido(Long id);
 }

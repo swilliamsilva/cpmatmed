@@ -1,56 +1,54 @@
 package com.cpmatmed.backend.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import com.cpmatmed.backend.dto.ProdutoDTO;
 import com.cpmatmed.backend.mapper.ProdutoMapper;
 import com.cpmatmed.backend.model.Produto;
 import com.cpmatmed.backend.repository.ProdutoRepository;
 import com.cpmatmed.backend.service.impl.ProdutoServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class ProdutoServiceTest {
 
     private ProdutoRepository produtoRepository;
-    private ProdutoMapper produtoMapper;
-    private ProdutoServiceImpl produtoService; // Alterado para ProdutoServiceImpl
+    private ProdutoServiceImpl produtoService;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
+        // Mockando o ProdutoRepository
         produtoRepository = mock(ProdutoRepository.class);
-        produtoMapper = new ProdutoMapper();
-        // Corrigido: Usando o construtor correto (adicione o construtor em ProdutoServiceImpl)
-        produtoService = new ProdutoServiceImpl(produtoRepository, produtoMapper);
+
+        // Inicializando o ProdutoService com o mock do ProdutoRepository
+        produtoService = new ProdutoServiceImpl(produtoRepository);
     }
 
     @Test
-    void listarTodos() {
+    void listarTodosProdutos_DeveRetornarProdutoDTO() {
         Produto produto = new Produto();
         produto.setId(1L);
         produto.setNome("Produto Teste");
+        produto.setDescricao("Descrição teste");
         produto.setQuantidade(10);
         produto.setPrecoUnitario(BigDecimal.valueOf(15));
-        
-        // Corrigido: Calcula valorTotal usando os campos do produto
-        BigDecimal valorTotal = produto.getPrecoUnitario().multiply(BigDecimal.valueOf(produto.getQuantidade()));
-    //    produto.setValorTotal(valorTotal); // Garanta que Produto tem setValorTotal()
 
+        // Mockando o comportamento do ProdutoRepository
         when(produtoRepository.findAll()).thenReturn(Collections.singletonList(produto));
 
-        List<ProdutoDTO> resultado = produtoService.listarTodos();
+        List<ProdutoDTO> resultado = produtoService.listarTodosProdutos();
 
         assertNotNull(resultado);
         assertEquals(1, resultado.size());
-        assertEquals("Produto Teste", resultado.get(0).getNome());
-        assertEquals(BigDecimal.valueOf(150), resultado.get(0).getValorTotal()); // Verifica o valorTotal
+
+        ProdutoDTO dto = resultado.get(0);
+        assertEquals("Produto Teste", dto.getNome());
+        assertEquals("Descrição teste", dto.getDescricao());
+        assertEquals(BigDecimal.valueOf(150), dto.getValorTotal());
     }
 }

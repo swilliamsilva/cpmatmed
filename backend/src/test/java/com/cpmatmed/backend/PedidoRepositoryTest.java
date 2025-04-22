@@ -18,7 +18,8 @@ import com.cpmatmed.backend.repository.FornecedorRepository;
 import com.cpmatmed.backend.repository.PedidoRepository;
 import com.cpmatmed.backend.repository.ProdutoRepository;
 
-@SpringBootTest
+
+@SpringBootTest(properties = "spring.config.name=application-test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional
 public class PedidoRepositoryTest {

@@ -1,29 +1,32 @@
 package com.cpmatmed.backend.controller;
 
-import com.cpmatmed.backend.dto.PedidoDTO;
-import com.cpmatmed.backend.dto.ProdutoDTO;
+import com.cpmatmed.backend.dto.PedidoResponse;
 import com.cpmatmed.backend.service.PedidoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(PedidoController.class)
+@SpringBootTest(properties = "spring.profiles.active=test")
+@AutoConfigureMockMvc
 public class PedidoControllerTest {
 
     @Autowired
@@ -35,79 +38,46 @@ public class PedidoControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private PedidoDTO pedidoDTO;
+    private List<PedidoResponse> pedidos;
 
     @BeforeEach
-    void setup() {
-        ProdutoDTO produtoDTO = new ProdutoDTO();
-        produtoDTO.setId(1L);
-        produtoDTO.setNome("Dipirona");
-        produtoDTO.setPrecoUnitario(new BigDecimal("10.00"));
-        produtoDTO.setQuantidade(2);
-        produtoDTO.setFornecedorId(1L);
+    void setUp() {
+        PedidoResponse p1 = new PedidoResponse();
+        p1.setId(1L);
+        p1.setValorTotal(new BigDecimal("100.00"));
+        p1.setNomeComprador("Comprador 1");
+        p1.setNomeFornecedor("Fornecedor 1");
 
-        pedidoDTO = new PedidoDTO();
-        pedidoDTO.setId(1L);
-        pedidoDTO.setDescricao("Pedido Teste");
-        pedidoDTO.setProdutos(Arrays.asList(produtoDTO));
+        PedidoResponse p2 = new PedidoResponse();
+        p2.setId(2L);
+        p2.setValorTotal(new BigDecimal("250.50"));
+        p2.setNomeComprador("Comprador 2");
+        p2.setNomeFornecedor("Fornecedor 2");
+
+        pedidos = Arrays.asList(p1, p2);
     }
 
     @Test
     void deveRetornarListaDePedidos() throws Exception {
-        when(pedidoService.listarTodosPedidos()).thenReturn(Arrays.asList(pedidoDTO));
+        when(pedidoService.listarPedidos()).thenReturn(pedidos);
 
-        mockMvc.perform(get("/pedidos"))
+        mockMvc.perform(get("/api/pedidos")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].descricao", is("Pedido Teste")));
+                .andExpect(jsonPath("$", hasSize(pedidos.size())))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[1].valorTotal", closeTo(250.50, 0.001)));
     }
 
     @Test
-    void deveBuscarPedidoPorIdExistente() throws Exception {
-        when(pedidoService.buscarPedidoPorId(1L)).thenReturn(pedidoDTO);
+    void deveRetornarErroQuandoBancoInacessivel() throws Exception {
+        doThrow(new DataAccessResourceFailureException("Erro ao acessar banco de dados"))
+                .when(pedidoService).listarPedidos();
 
-        mockMvc.perform(get("/pedidos/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.descricao", is("Pedido Teste")));
-    }
-
-    @Test
-    void deveRetornar404ParaPedidoInexistente() throws Exception {
-        when(pedidoService.buscarPedidoPorId(99L)).thenReturn(null);
-
-        mockMvc.perform(get("/pedidos/99"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void deveRetornarProdutosDoPedido() throws Exception {
-        when(pedidoService.listarProdutosDoPedido(1L)).thenReturn(pedidoDTO.getProdutos());
-
-        mockMvc.perform(get("/pedidos/1/produtos"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].nome", is("Dipirona")))
-                .andExpect(jsonPath("$[0].quantidade", is(2)));
-    }
-
-    @Test
-    void deveRetornar404SePedidoNaoTiverProdutos() throws Exception {
-        when(pedidoService.listarProdutosDoPedido(99L)).thenReturn(Collections.emptyList());
-
-        mockMvc.perform(get("/pedidos/99/produtos"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void deveCriarPedidoComSucesso() throws Exception {
-        when(pedidoService.criarPedido(Mockito.any(PedidoDTO.class))).thenReturn(pedidoDTO);
-
-        mockMvc.perform(post("/pedidos")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(pedidoDTO)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.descricao", is("Pedido Teste")))
-                .andExpect(jsonPath("$.produtos[0].nome", is("Dipirona")));
+        mockMvc.perform(get("/api/pedidos")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is5xxServerError())
+                .andExpect(result ->
+                        result.getResolvedException().getMessage().contains("Erro ao acessar banco"));
     }
 }

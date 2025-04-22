@@ -1,5 +1,8 @@
 <div class="container mt-4">
   <h2>Cadastrar Produto</h2>
+  <p *ngIf="produtoForm">Formulário está carregado</p>
+  <p *ngIf="!produtoForm">Formulário ainda não carregado</p>
+
   <form [formGroup]="produtoForm" (ngSubmit)="onSubmit()">
     <div class="form-group mb-3">
       <label for="nome">Nome do Produto</label>

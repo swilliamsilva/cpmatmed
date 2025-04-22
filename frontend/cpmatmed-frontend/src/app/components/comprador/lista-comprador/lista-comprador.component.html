@@ -1,1 +1,8 @@
-<p>Lista de comprador!</p>
+<div class="container mt-4">
+  <h2>Lista de Compradores</h2>
+  <ul class="list-group">
+    <li *ngFor="let comprador of compradores" class="list-group-item">
+      {{ comprador.nome }} - {{ comprador.email }}
+    </li>
+  </ul>
+</div>

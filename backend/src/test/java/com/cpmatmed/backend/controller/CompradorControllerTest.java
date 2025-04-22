@@ -4,20 +4,30 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import java.util.List;
 
 import com.cpmatmed.backend.dto.CompradorDTO;
 import com.cpmatmed.backend.service.CompradorService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@WebMvcTest(controllers = CompradorController.class)
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+@SpringBootTest(properties = "spring.profiles.active=test")
+@AutoConfigureMockMvc
 public class CompradorControllerTest {
 
     @Autowired
@@ -26,23 +36,43 @@ public class CompradorControllerTest {
     @MockBean
     private CompradorService compradorService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private List<CompradorDTO> compradores;
+
+    @BeforeEach
+    void setUp() {
+        CompradorDTO c1 = new CompradorDTO(1L, "Comprador A");
+        CompradorDTO c2 = new CompradorDTO(2L, "Comprador B");
+
+        compradores = Arrays.asList(c1, c2);
+    }
+
     @Test
-    public void deveListarTodosOsCompradores() throws Exception {
-        CompradorDTO comprador1 = new CompradorDTO();
-        comprador1.setId(1L);
-        comprador1.setNome("Maria");
-
-        CompradorDTO comprador2 = new CompradorDTO();
-        comprador2.setId(2L);
-        comprador2.setNome("João");
-
-        when(compradorService.listarTodos()).thenReturn(Arrays.asList(comprador1, comprador2));
+    void deveListarTodosOsCompradores() throws Exception {
+        when(compradorService.listarTodos()).thenReturn(compradores);
 
         mockMvc.perform(get("/api/compradores")
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].nome").value("Maria"))
-                .andExpect(jsonPath("$[1].nome").value("João"));
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].nome", is("Comprador A")))
+                .andExpect(jsonPath("$[1].nome", is("Comprador B")));
+    }
+
+    @Test
+    void deveRetornarErroQuandoBancoInacessivel() throws Exception {
+        when(compradorService.listarTodos())
+                .thenThrow(new DataAccessResourceFailureException("Banco inacessível"));
+
+        mockMvc.perform(get("/api/compradores")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is5xxServerError())
+                .andExpect(result -> {
+                    Exception ex = result.getResolvedException();
+                    assertNotNull(ex);
+                    assertTrue(ex.getMessage().contains("Banco inacessível"));
+                });
     }
 }

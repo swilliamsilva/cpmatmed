@@ -1,1 +1,13 @@
-<p>detalhe-pedido works!</p>
+<div class="container mt-4" *ngIf="pedido">
+  <h2>Detalhes do Pedido #{{ pedido.id }}</h2>
+  <p><strong>Descrição:</strong> {{ pedido.descricao }}</p>
+  <p><strong>Data de Criação:</strong> {{ pedido.dataCriacao }}</p>
+  <p><strong>Comprador ID:</strong> {{ pedido.compradorId }}</p>
+
+  <h4>Produtos</h4>
+  <ul class="list-group">
+    <li *ngFor="let produto of pedido.produtos" class="list-group-item">
+      Produto ID: {{ produto.produtoId }} - Quantidade: {{ produto.quantidade }}
+    </li>
+  </ul>
+</div>

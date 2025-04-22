@@ -1,75 +1,125 @@
 package com.cpmatmed.backend.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
+import com.cpmatmed.backend.dto.PedidoRequest;
+import com.cpmatmed.backend.dto.PedidoRequest.ItemPedidoRequest;
+import com.cpmatmed.backend.dto.PedidoResponse;
+import com.cpmatmed.backend.exception.ResourceNotFoundException;
+import com.cpmatmed.backend.model.Comprador;
+import com.cpmatmed.backend.model.Fornecedor;
+import com.cpmatmed.backend.model.Pedido;
+import com.cpmatmed.backend.model.Produto;
+import com.cpmatmed.backend.repository.CompradorRepository;
+import com.cpmatmed.backend.repository.FornecedorRepository;
+import com.cpmatmed.backend.repository.PedidoRepository;
+import com.cpmatmed.backend.repository.ProdutoRepository;
+import com.cpmatmed.backend.service.impl.PedidoServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.*;
 
-import com.cpmatmed.backend.dto.ProdutoDTO;
-import com.cpmatmed.backend.exception.PedidoNaoEncontradoException;
-import com.cpmatmed.backend.model.Pedido;
-import com.cpmatmed.backend.model.Produto;
-import com.cpmatmed.backend.repository.PedidoRepository;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Optional;
 
-@RunWith(MockitoJUnitRunner.class) // Habilita o Mockito com JUnit 4
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+@RunWith(org.mockito.junit.MockitoJUnitRunner.class)
 public class PedidoServiceTest {
+
+    @InjectMocks
+    private PedidoServiceImpl pedidoService;
 
     @Mock
     private PedidoRepository pedidoRepository;
 
-    @InjectMocks
-    private PedidoService pedidoService;
+    @Mock
+    private CompradorRepository compradorRepository;
 
-    // Remove métodos duplicados de setup
+    @Mock
+    private FornecedorRepository fornecedorRepository;
+
+    @Mock
+    private ProdutoRepository produtoRepository;
+
+    private PedidoRequest pedidoRequest;
+
     @Before
-    public void init() {
-        // Configurações comuns (se necessárias)
+    public void setUp() {
+        pedidoRequest = new PedidoRequest();
+        pedidoRequest.setCompradorId(1L);
+        pedidoRequest.setFornecedorId(1L);
+
+        ItemPedidoRequest item1 = new ItemPedidoRequest();
+        item1.setProdutoId(1L);
+        ItemPedidoRequest item2 = new ItemPedidoRequest();
+        item2.setProdutoId(2L);
+
+        pedidoRequest.setProdutos(Arrays.asList(item1, item2));
     }
 
     @Test
-    public void testListarProdutosDoPedido_DeveRetornarListaDeProdutosDTO() {
-        // Configuração do mock
+    public void deveSalvarPedidoComSucesso() {
+        Comprador comprador = new Comprador();
+        comprador.setId(1L);
+
+        Fornecedor fornecedor = new Fornecedor();
+        fornecedor.setId(1L);
+
         Produto produto1 = new Produto();
-        produto1.setNome("Dipirona");
-        produto1.setPrecoUnitario(new BigDecimal("3.50"));
-        produto1.setQuantidade(2);
+        produto1.setId(1L);
+        produto1.setPrecoUnitario(BigDecimal.valueOf(100));
 
         Produto produto2 = new Produto();
-        produto2.setNome("Paracetamol");
-        produto2.setPrecoUnitario(new BigDecimal("5.00"));
-        produto2.setQuantidade(1);
+        produto2.setId(2L);
+        produto2.setPrecoUnitario(BigDecimal.valueOf(100));
 
         Pedido pedido = new Pedido();
         pedido.setId(1L);
         pedido.setProdutos(Arrays.asList(produto1, produto2));
 
-        when(pedidoRepository.findById(1L)).thenReturn(Optional.of(pedido));
+        when(compradorRepository.findById(1L)).thenReturn(Optional.of(comprador));
+        when(fornecedorRepository.findById(1L)).thenReturn(Optional.of(fornecedor));
+        when(produtoRepository.findById(1L)).thenReturn(Optional.of(produto1));
+        when(produtoRepository.findById(2L)).thenReturn(Optional.of(produto2));
+        when(pedidoRepository.save(any(Pedido.class))).thenReturn(pedido);
 
-        // Execução do teste
-        List<ProdutoDTO> resultado = pedidoService.listarProdutosDoPedido(1L);
+        PedidoResponse resultado = pedidoService.salvarPedido(pedidoRequest);
 
-        // Verificações
-        assertEquals(2, resultado.size());
-        assertEquals("Dipirona", resultado.get(0).getNome());
-        assertEquals("Paracetamol", resultado.get(1).getNome());
+        assertNotNull(resultado);
+        assertEquals(Long.valueOf(1L), resultado.getId());
+        assertEquals(BigDecimal.valueOf(200), resultado.getValorTotal());
     }
 
-    @Test(expected = PedidoNaoEncontradoException.class) // Testa exceção específica
-    public void testListarProdutosDoPedido_DeveLancarExcecao_QuandoPedidoNaoEncontrado() {
-        // Configuração do mock
-        when(pedidoRepository.findById(99L)).thenReturn(Optional.empty());
+    @Test(expected = ResourceNotFoundException.class)
+    public void deveLancarErroQuandoCompradorNaoEncontrado() {
+        when(compradorRepository.findById(1L)).thenReturn(Optional.empty());
+        pedidoService.salvarPedido(pedidoRequest);
+    }
 
-        // Execução do teste (deve lançar exceção)
-        pedidoService.listarProdutosDoPedido(99L);
+    @Test(expected = ResourceNotFoundException.class)
+    public void deveLancarErroQuandoFornecedorNaoEncontrado() {
+        Comprador comprador = new Comprador();
+        comprador.setId(1L);
+
+        when(compradorRepository.findById(1L)).thenReturn(Optional.of(comprador));
+        when(fornecedorRepository.findById(1L)).thenReturn(Optional.empty());
+
+        pedidoService.salvarPedido(pedidoRequest);
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void deveLancarErroQuandoProdutoNaoEncontrado() {
+        Comprador comprador = new Comprador();
+        comprador.setId(1L);
+        Fornecedor fornecedor = new Fornecedor();
+        fornecedor.setId(1L);
+
+        when(compradorRepository.findById(1L)).thenReturn(Optional.of(comprador));
+        when(fornecedorRepository.findById(1L)).thenReturn(Optional.of(fornecedor));
+        when(produtoRepository.findById(1L)).thenReturn(Optional.empty());
+
+        pedidoService.salvarPedido(pedidoRequest);
     }
 }

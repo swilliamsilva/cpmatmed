@@ -1,1 +1,13 @@
-<p>lista-pedido works!</p>
+<div class="container mt-4">
+  <h2>Lista de Pedidos</h2>
+  <ul class="list-group">
+    <li *ngFor="let pedido of pedidos" class="list-group-item d-flex justify-content-between align-items-center">
+      <span>
+        {{ pedido.descricao }} - Criado em: {{ pedido.dataCriacao }}
+      </span>
+      <a [routerLink]="['/pedido/detalhe-pedido', pedido.id]" class="btn btn-sm btn-outline-primary">
+        Ver Detalhes
+      </a>
+    </li>
+  </ul>
+</div>

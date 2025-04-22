@@ -1,25 +1,17 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { DetalhePedidoComponent } from './detalhe-pedido.component';
+@Component({
+  selector: 'app-detalhe-pedido',
+  templateUrl: './detalhe-pedido.component.html',
+  styleUrls: ['./detalhe-pedido.component.scss']
+})
+export class DetalhePedidoComponent implements OnInit {
+  pedidoId!: number;
 
-describe('DetalhePedidoComponent', () => {
-  let component: DetalhePedidoComponent;
-  let fixture: ComponentFixture<DetalhePedidoComponent>;
+  constructor(private route: ActivatedRoute) {}
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ DetalhePedidoComponent ]
-    })
-    .compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(DetalhePedidoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  ngOnInit(): void {
+    this.pedidoId = Number(this.route.snapshot.paramMap.get('id'));
+  }
+}
