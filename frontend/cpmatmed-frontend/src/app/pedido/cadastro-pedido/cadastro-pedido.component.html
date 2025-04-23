@@ -1,0 +1,48 @@
+<div class="container mt-4">
+  <h2>Cadastrar Pedido</h2>
+
+  <!-- Mensagens de feedback -->
+  <div *ngIf="mensagemSucesso" class="alert alert-success" role="alert">
+    {{ mensagemSucesso }}
+  </div>
+  <div *ngIf="mensagemErro" class="alert alert-danger" role="alert">
+    {{ mensagemErro }}
+  </div>
+
+  <form [formGroup]="pedidoForm" (ngSubmit)="onSubmit()">
+    <div class="form-group mb-3">
+      <label for="descricao">Descrição</label>
+      <input id="descricao" type="text" class="form-control" formControlName="descricao" placeholder="Informe a descrição">
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="dataCriacao">Data de Criação</label>
+      <input id="dataCriacao" type="date" class="form-control" formControlName="dataCriacao">
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="compradorId">ID do Comprador</label>
+      <input id="compradorId" type="number" class="form-control" formControlName="compradorId" placeholder="Informe o ID do comprador">
+    </div>
+
+    <div formArrayName="produtos" class="mb-3">
+      <label>Produtos</label>
+      <div *ngFor="let produto of produtos.controls; let i = index" [formGroupName]="i" class="mb-2 border p-2 rounded">
+        <div class="row">
+          <div class="col">
+            <input class="form-control" type="number" placeholder="ID do Produto" formControlName="produtoId">
+          </div>
+          <div class="col">
+            <input class="form-control" type="number" placeholder="Quantidade" formControlName="quantidade">
+          </div>
+          <div class="col-auto">
+            <button type="button" class="btn btn-danger" (click)="removerProduto(i)">Remover</button>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-secondary mt-2" (click)="adicionarProduto()">Adicionar Produto</button>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3" [disabled]="pedidoForm.invalid">Salvar Pedido</button>
+  </form>
+</div>
