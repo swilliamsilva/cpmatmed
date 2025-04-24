@@ -38,4 +38,14 @@ describe('ProdutoRouting', () => {
     await router.navigate(['/novo']);
     expect(location.path()).toBe('/novo');
   });
+
+  it('deve navegar para /', async () => {
+    await router.navigate(['/']);
+    expect(location.path()).toBe('/');
+  });
+
+  it('deve navegar para /:id', async () => {
+    await router.navigate(['/42']); // Testando um ID específico
+    expect(location.path()).toBe('/42');
+  });
 });

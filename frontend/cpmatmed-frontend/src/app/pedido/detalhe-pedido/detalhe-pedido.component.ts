@@ -4,12 +4,12 @@ import { PedidoService } from '../pedido.service';
 
 @Component({
   selector: 'app-detalhe-pedido',
-  templateUrl: './detalhe-pedido.component.html',
-  styleUrls: ['./detalhe-pedido.component.scss']
+  templateUrl: './detalhe-pedido.component.html'
 })
 export class DetalhePedidoComponent implements OnInit {
   pedidoId!: number;
-  pedido: any;
+  pedido: any = {};
+  errorMessage: string = '';  // Para capturar erros
 
   constructor(
     private route: ActivatedRoute,
@@ -17,9 +17,17 @@ export class DetalhePedidoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.pedidoId = Number(this.route.snapshot.paramMap.get('id'));
-    this.pedidoService.buscarPedidoPorId(this.pedidoId).subscribe(data => {
-      this.pedido = data;
-    });
+    const id = +this.route.snapshot.paramMap.get('id')!;
+    if (id) {
+      this.pedidoId = id;
+      this.pedidoService.buscarPedidoPorId(id).subscribe(
+        (data) => {
+          this.pedido = data;
+        },
+        (error) => {
+          this.errorMessage = 'Erro ao carregar os dados do pedido';
+        }
+      );
+    }
   }
 }

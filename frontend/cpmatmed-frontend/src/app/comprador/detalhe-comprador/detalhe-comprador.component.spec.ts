@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DetalheCompradorComponent } from './detalhe-comprador.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { MockCompradorService } from '../mock-comprador.service';
 
 describe('DetalheCompradorComponent', () => {
   let component: DetalheCompradorComponent;
@@ -11,21 +11,12 @@ describe('DetalheCompradorComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DetalheCompradorComponent],
-      imports: [HttpClientTestingModule],
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (key: string) => {
-                  if (key === 'id') return '1';  // Retorna o ID correto
-                  return null;
-                }
-              }
-            }
-          }
-        }
+          useValue: { snapshot: { paramMap: { get: () => '1' } } },  // Ajuste para refletir a rota com ID
+        },
+        { provide: 'CompradorService', useClass: MockCompradorService }
       ]
     }).compileComponents();
   });
@@ -33,14 +24,21 @@ describe('DetalheCompradorComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DetalheCompradorComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();  // Garante que o componente seja renderizado
+    fixture.detectChanges();
   });
 
   it('deve criar o componente', () => {
     expect(component).toBeTruthy();
   });
 
-  it('deve atribuir o valor correto ao compradorId', () => {
-    expect(component.compradorId).toBe(1);  // Verifica se o ID foi corretamente atribuído
+  it('deve carregar detalhes do comprador no ngOnInit', () => {
+    // Garantir que os detalhes do comprador estejam sendo carregados corretamente
+    expect(component.comprador).toBeTruthy();
+    expect(component.comprador.nome).toBe('Mock Comprador Detalhe'); // Verifica se o nome é o esperado
+  });
+
+  it('deve atribuir o ID correto ao compradorId a partir da rota', () => {
+    // Verifica se o ID do comprador está sendo atribuído corretamente
+    expect(component.compradorId).toBe(1);
   });
 });

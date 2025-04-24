@@ -33,13 +33,20 @@ describe('CadastroCompradorComponent', () => {
   });
 
   it('deve validar o formulário com dados válidos', () => {
-    component.compradorForm.setValue({ nome: 'Maria', email: 'maria@teste.com' });
+    const validData = { nome: 'Maria', email: 'maria@teste.com' };
+    component.compradorForm.setValue(validData);
     expect(component.compradorForm.valid).toBeTrue();
+  });
+
+  it('deve invalidar o formulário se apenas o nome estiver preenchido', () => {
+    component.compradorForm.setValue({ nome: 'Carlos', email: '' });
+    expect(component.compradorForm.valid).toBeFalse();
   });
 
   it('deve manter o botão desabilitado se o formulário for inválido', () => {
     component.compradorForm.setValue({ nome: '', email: '' });
     fixture.detectChanges();
+
     const button = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
     expect(button.disabled).toBeTrue();
   });
@@ -56,10 +63,11 @@ describe('CadastroCompradorComponent', () => {
     expect(submitSpy).toHaveBeenCalled();
   });
 
-  it('deve logar no console ao submeter o formulário', () => {
+  it('deve logar os dados no console ao submeter o formulário válido', () => {
     const consoleSpy = spyOn(console, 'log');
-    component.compradorForm.setValue({ nome: 'João', email: 'joao@teste.com' });
+    const formData = { nome: 'João', email: 'joao@teste.com' };
+    component.compradorForm.setValue(formData);
     component.onSubmit();
-    expect(consoleSpy).toHaveBeenCalledWith({ nome: 'João', email: 'joao@teste.com' });
+    expect(consoleSpy).toHaveBeenCalledWith(formData);
   });
 });

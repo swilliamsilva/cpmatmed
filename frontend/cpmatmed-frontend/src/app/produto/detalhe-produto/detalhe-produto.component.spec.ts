@@ -1,13 +1,14 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { DetalheProdutoComponent } from './detalhe-produto.component';
+import { of } from 'rxjs'; // Para simular observables, caso precise
 
 describe('DetalheProdutoComponent', () => {
   let component: DetalheProdutoComponent;
   let fixture: ComponentFixture<DetalheProdutoComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [DetalheProdutoComponent],
       providers: [
         {
@@ -22,7 +23,7 @@ describe('DetalheProdutoComponent', () => {
         },
       ],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DetalheProdutoComponent);
@@ -32,5 +33,11 @@ describe('DetalheProdutoComponent', () => {
 
   it('deve ser criado', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('deve capturar o ID da rota', () => {
+    const route = TestBed.inject(ActivatedRoute); // Captura o ActivatedRoute
+    const produtoId = route.snapshot.paramMap.get('id');
+    expect(produtoId).toBe('1'); // Verifica se o ID capturado é '1'
   });
 });

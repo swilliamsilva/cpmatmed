@@ -9,14 +9,16 @@ import { DetalheFornecedorComponent } from './detalhe-fornecedor/detalhe-fornece
 
 @NgModule({
   declarations: [
+    // Declarando os componentes que fazem parte deste módulo
     CadastroFornecedorComponent,
     ListaFornecedorComponent,
     DetalheFornecedorComponent
   ],
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FornecedorRoutingModule
+    // Módulos necessários para os componentes de fornecedor
+    CommonModule,  // Módulo comum do Angular, necessário para muitos componentes padrões (ngIf, ngFor, etc)
+    ReactiveFormsModule,  // Necessário para formulários reativos
+    FornecedorRoutingModule  // Roteamento específico para este módulo
   ]
 })
 export class FornecedorModule {}

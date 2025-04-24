@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Fornecedor, FornecedorService } from '../fornecedor.service';
+import { FornecedorService } from '../fornecedor.service';
 
 @Component({
   selector: 'app-detalhe-fornecedor',
@@ -8,7 +8,8 @@ import { Fornecedor, FornecedorService } from '../fornecedor.service';
 })
 export class DetalheFornecedorComponent implements OnInit {
   fornecedorId!: number;
-  fornecedor?: Fornecedor;
+  fornecedor: any = {};  // Inicializa fornecedor como objeto vazio
+  errorMessage: string = '';  // Para mensagens de erro
 
   constructor(
     private route: ActivatedRoute,
@@ -16,9 +17,17 @@ export class DetalheFornecedorComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fornecedorId = +this.route.snapshot.paramMap.get('id')!;
-    this.fornecedorService.buscarPorId(this.fornecedorId).subscribe(fornecedor => {
-      this.fornecedor = fornecedor;
-    });
+    const id = +this.route.snapshot.paramMap.get('id')!;
+    if (id) {
+      this.fornecedorId = id;
+      this.fornecedorService.buscarPorId(id).subscribe(
+        (data) => {
+          this.fornecedor = data;
+        },
+        (error) => {
+          this.errorMessage = 'Erro ao carregar os dados do fornecedor';
+        }
+      );
+    }
   }
 }

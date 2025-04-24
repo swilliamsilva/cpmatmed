@@ -5,10 +5,11 @@ import { ListaFornecedorComponent } from './lista-fornecedor/lista-fornecedor.co
 import { DetalheFornecedorComponent } from './detalhe-fornecedor/detalhe-fornecedor.component';
 
 const routes: Routes = [
-  { path: 'cadastro-fornecedor', component: CadastroFornecedorComponent },
+  { path: '', redirectTo: 'lista-fornecedor', pathMatch: 'full' },  // Redireciona a rota vazia para a lista de fornecedores
   { path: 'lista-fornecedor', component: ListaFornecedorComponent },
-  { path: 'detalhe-fornecedor/:id', component: DetalheFornecedorComponent }
-
+  { path: 'cadastro-fornecedor', component: CadastroFornecedorComponent },
+  { path: 'detalhe-fornecedor/:id', component: DetalheFornecedorComponent },
+  { path: '**', redirectTo: 'lista-fornecedor' }  // Redireciona rotas inválidas para a lista de fornecedores
 ];
 
 @NgModule({

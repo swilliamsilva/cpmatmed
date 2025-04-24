@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DetalhePedidoComponent } from './detalhe-pedido.component';
 import { ActivatedRoute } from '@angular/router';
 import { PedidoService } from '../pedido.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('DetalhePedidoComponent', () => {
@@ -23,14 +23,14 @@ describe('DetalhePedidoComponent', () => {
           useValue: {
             snapshot: {
               paramMap: {
-                get: (key: string) => '42'
+                get: (key: string) => '42'  // Mock do parâmetro de rota
               }
             }
           }
         },
         { provide: PedidoService, useValue: pedidoServiceMock }
       ],
-      schemas: [NO_ERRORS_SCHEMA] // ignora erros de tags externas no HTML
+      schemas: [NO_ERRORS_SCHEMA] // Ignora erros de tags externas no HTML
     }).compileComponents();
   });
 
@@ -55,16 +55,13 @@ describe('DetalhePedidoComponent', () => {
       ]
     };
 
-    // Configura o serviço mock para retornar o pedido
     pedidoServiceMock.buscarPedidoPorId.and.returnValue(of(mockPedido));
 
-    // Executa o ciclo de vida e dispara o ngOnInit
-    fixture.detectChanges();
+    fixture.detectChanges();  // Dispara o ngOnInit
 
-    // Valida o conteúdo renderizado no HTML
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(component.pedido).toEqual(mockPedido);
+    expect(component.pedido).toEqual(mockPedido);  // Verifica se os dados do pedido foram carregados
     expect(compiled.querySelector('h2')?.textContent).toContain('Detalhes do Pedido #42');
     expect(compiled.querySelector('p:nth-of-type(1)')?.textContent).toContain('Pedido de Teste');
     expect(compiled.querySelector('p:nth-of-type(2)')?.textContent).toContain('2025-04-23');
@@ -76,5 +73,15 @@ describe('DetalhePedidoComponent', () => {
     expect(produtos[0].textContent).toContain('Quantidade: 2');
     expect(produtos[1].textContent).toContain('Produto ID: 2');
     expect(produtos[1].textContent).toContain('Quantidade: 5');
+  });
+
+  it('deve exibir erro se não encontrar o pedido', () => {
+    pedidoServiceMock.buscarPedidoPorId.and.returnValue(throwError('Erro ao carregar o pedido'));
+
+    fixture.detectChanges();  // Executa novamente para refletir a mudança
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.error-message')).toBeTruthy(); // Verifica se o erro foi exibido
+    expect(component.errorMessage).toBe('Erro ao carregar os dados do pedido'); // Verifica se a mensagem de erro foi setada
   });
 });

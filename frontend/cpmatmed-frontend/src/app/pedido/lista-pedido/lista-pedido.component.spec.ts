@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ListaPedidoComponent } from './lista-pedido.component';
 import { PedidoService } from '../pedido.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 
@@ -45,6 +45,7 @@ describe('ListaPedidoComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const itens = compiled.querySelectorAll('ul li');
 
+    // Verificar se os pedidos foram carregados corretamente
     expect(component.pedidos.length).toBe(2);
     expect(itens.length).toBe(2);
     expect(itens[0].textContent).toContain('Pedido A');
@@ -64,7 +65,16 @@ describe('ListaPedidoComponent', () => {
 
     const links = fixture.debugElement.queryAll(By.css('a'));
     expect(links.length).toBe(2);
-    expect(links[0].attributes['ng-reflect-router-link']).toBe('/pedido/detalhe-pedido,1');
-    expect(links[1].attributes['ng-reflect-router-link']).toBe('/pedido/detalhe-pedido,2');
+    expect(links[0].nativeElement.getAttribute('href')).toBe('/pedido/detalhe-pedido/1');
+    expect(links[1].nativeElement.getAttribute('href')).toBe('/pedido/detalhe-pedido/2');
+  });
+
+  it('deve exibir mensagem de erro caso falhe ao carregar os pedidos', () => {
+    pedidoServiceMock.listarPedidos.and.returnValue(throwError('Erro ao carregar pedidos'));
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.error-message')).toBeTruthy();  // Assumindo que o erro seja exibido com essa classe
+    expect(component.errorMessage).toBe('Erro ao carregar os pedidos');  // Verifica se a mensagem de erro foi atribuída corretamente
   });
 });
