@@ -1,13 +1,15 @@
+// lista-produto.component.ts
 import { Component, OnInit } from '@angular/core';
-import { ProdutoService, Produto } from '../produto.service';
+import { ProdutoService } from '../produto.service';
 import { Router } from '@angular/router';
+import { ProdutoDTO } from '../dto/produto.dto'; // Importação adicionada
 
 @Component({
   selector: 'app-lista-produto',
-  templateUrl: './lista-produto.component.html'
+  templateUrl: './lista-produto.component.html',
 })
 export class ListaProdutoComponent implements OnInit {
-  produtos: Produto[] = [];
+  produtos: ProdutoDTO[] = []; // Tipo corrigido
 
   constructor(private produtoService: ProdutoService, private router: Router) {}
 
@@ -16,7 +18,20 @@ export class ListaProdutoComponent implements OnInit {
   }
 
   carregarProdutos(): void {
-    this.produtoService.listar().subscribe(data => this.produtos = data);
+    this.produtoService.listar().subscribe(
+      (data) => {
+        if (Array.isArray(data)) {
+          this.produtos = data;
+        } else {
+          this.produtos = [];
+          console.error('Dados inválidos recebidos para produtos');
+        }
+      },
+      (error) => {
+        this.produtos = [];
+        console.error('Erro ao carregar produtos', error);
+      }
+    );
   }
 
   editarProduto(id: number): void {

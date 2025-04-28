@@ -4,12 +4,12 @@ import { PedidoService } from '../pedido.service';
 
 @Component({
   selector: 'app-detalhe-pedido',
-  templateUrl: './detalhe-pedido.component.html'
+  templateUrl: './detalhe-pedido.component.html',
 })
 export class DetalhePedidoComponent implements OnInit {
   pedidoId!: number;
   pedido: any = {};
-  errorMessage: string = '';  // Para capturar erros
+  errorMessage: string = ''; // Para capturar erros
 
   constructor(
     private route: ActivatedRoute,
@@ -20,7 +20,7 @@ export class DetalhePedidoComponent implements OnInit {
     const id = +this.route.snapshot.paramMap.get('id')!;
     if (id) {
       this.pedidoId = id;
-      this.pedidoService.buscarPedidoPorId(id).subscribe(
+      this.pedidoService.buscarPorId(id).subscribe(
         (data) => {
           this.pedido = data;
         },

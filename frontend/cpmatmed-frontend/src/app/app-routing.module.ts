@@ -5,23 +5,19 @@ const routes: Routes = [
   { path: '', redirectTo: 'produto/lista-produto', pathMatch: 'full' },
   {
     path: 'produto',
-    loadChildren: () =>
-      import('./produto/produto.module').then((m) => m.ProdutoModule),
+    loadChildren: () => import('./produto/produto.module').then(m => m.ProdutoModule),
   },
   {
     path: 'comprador',
-    loadChildren: () =>
-      import('./comprador/comprador.module').then((m) => m.CompradorModule),
+    loadChildren: () => import('./comprador/comprador.module').then(m => m.CompradorModule),
   },
   {
     path: 'fornecedor',
-    loadChildren: () =>
-      import('./fornecedor/fornecedor.module').then((m) => m.FornecedorModule),
+    loadChildren: () => import('./fornecedor/fornecedor.module').then(m => m.FornecedorModule),
   },
   {
     path: 'pedido',
-    loadChildren: () =>
-      import('./pedido/pedido.module').then((m) => m.PedidoModule),
+    loadChildren: () => import('./pedido/pedido.module').then(m => m.PedidoModule),
   },
   { path: '**', redirectTo: 'produto/lista-produto' },
 ];

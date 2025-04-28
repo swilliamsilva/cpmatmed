@@ -8,18 +8,36 @@ import { PedidoService } from '../pedido.service';
 })
 export class ListaPedidoComponent implements OnInit {
   pedidos: any[] = [];
-  errorMessage: string = ''; // Definindo errorMessage
+  errorMessage: string = '';
 
   constructor(private pedidoService: PedidoService) {}
 
   ngOnInit(): void {
-    this.pedidoService.listarPedidos().subscribe(
-      (data) => {
-        this.pedidos = data;
+    this.carregarPedidos();
+  }
+
+  carregarPedidos(): void {
+    this.pedidoService.listar().subscribe({
+      next: (data) => {
+        this.pedidos = Array.isArray(data) ? data : [];
       },
-      (error) => {
-        this.errorMessage = 'Erro ao carregar os pedidos'; // Atribui a mensagem de erro
+      error: (error) => {
+        this.pedidos = [];
+        this.errorMessage = 'Erro ao carregar os pedidos';
+        console.error('Erro ao carregar pedidos', error);
       }
-    );
+    });
+  }
+
+  excluirpedido(id: number): void {
+    this.pedidoService.excluir(id).subscribe({
+      next: () => {
+        this.carregarPedidos(); // Recarrega a lista após exclusão
+      },
+      error: (error) => {
+        this.errorMessage = 'Erro ao excluir pedido: ' + error.message;
+        console.error('Erro na exclusão', error);
+      }
+    });
   }
 }

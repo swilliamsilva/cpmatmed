@@ -1,22 +1,28 @@
 import { Observable, of } from 'rxjs';
-
-// Tipagem do comprador
-interface Comprador {
-  id: number;
-  nome: string;
-}
+import { CompradorDTO } from './dto/comprador.dto';
 
 export class MockCompradorService {
-
-  // Método para buscar todos os compradores
-  getCompradores(): Observable<Comprador[]> {
-    // Retorna um Observable com uma lista de compradores mockados
-    return of([{ id: 1, nome: 'Mock Comprador' }]);
+  getCompradores(): Observable<CompradorDTO[]> {
+    return of([{
+      id: 1,
+      nome: 'Mock Comprador',
+      email: 'mock@teste.com' // ✅ Campo email
+    }]);
   }
 
-  // Método para buscar um comprador por ID
-  getCompradorPorId(id: number): Observable<Comprador> {
-    // Retorna um Observable com um comprador específico
-    return of({ id, nome: 'Mock Comprador Detalhe' });
+  getCompradorPorId(id: number): Observable<CompradorDTO> {
+    return of({
+      id,
+      nome: 'Mock Comprador Detalhe',
+      email: 'mock.detalhe@teste.com'
+    });
+  }
+
+  criar(comprador: CompradorDTO): Observable<CompradorDTO> {
+    return of({
+      id: 1,
+      nome: comprador.nome,
+      email: comprador.email // ✅ Retornando email
+    });
   }
 }

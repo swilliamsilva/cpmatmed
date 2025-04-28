@@ -1,23 +1,18 @@
-// Classe: DetalheCompradorComponent.ts - Aplicação: cpmatmed
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CompradorService } from '../comprador.service';
-
-export interface Comprador {
-  id?: number;
-  nome: string;
-  email: string;
-}
+import { CompradorDTO } from '../dto/comprador.dto';
 
 @Component({
   selector: 'app-detalhe-comprador',
   templateUrl: './detalhe-comprador.component.html',
-  styleUrls: ['./detalhe-comprador.component.scss']
 })
 export class DetalheCompradorComponent implements OnInit {
-  compradorId!: number;
-  comprador: Comprador | null = null;  // Usando a interface Comprador
-  errorMessage: string = '';  // Para capturar possíveis erros
+  comprador: CompradorDTO = {
+    id: 0,
+    nome: '',
+    email: '' 
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -25,17 +20,11 @@ export class DetalheCompradorComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = +this.route.snapshot.paramMap.get('id')!;
+    const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
-      this.compradorId = id;
-      this.compradorService.buscarPorId(id).subscribe(
-        (data) => {
-          this.comprador = data;
-        },
-        (error) => {
-          this.errorMessage = 'Erro ao carregar os dados do comprador';
-        }
-      );
+      this.compradorService.getById(id).subscribe((data) => {
+        this.comprador = data;
+      });
     }
   }
 }

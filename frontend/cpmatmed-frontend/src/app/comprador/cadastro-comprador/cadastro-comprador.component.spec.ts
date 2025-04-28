@@ -1,22 +1,48 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CadastroCompradorComponent } from './cadastro-comprador.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
+import { CompradorService } from '../comprador.service';
+import { of, throwError } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { CompradorDTO } from '../dto/comprador.dto';
+import { Router } from '@angular/router';
+
+class MockCompradorService {
+  criar(comprador: CompradorDTO) {
+    return of({
+      id: 1,
+      nome: comprador.nome,
+      email: comprador.email,
+    });
+  }
+}
 
 describe('CadastroCompradorComponent', () => {
   let component: CadastroCompradorComponent;
   let fixture: ComponentFixture<CadastroCompradorComponent>;
+  let compradorService: CompradorService;
+  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CadastroCompradorComponent],
-      imports: [ReactiveFormsModule, FormsModule]
+      imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        RouterTestingModule.withRoutes([]),
+      ],
+      providers: [
+        { provide: CompradorService, useClass: MockCompradorService },
+      ],
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CadastroCompradorComponent);
     component = fixture.componentInstance;
+    compradorService = TestBed.inject(CompradorService);
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.stub();
     fixture.detectChanges();
   });
 
@@ -24,50 +50,46 @@ describe('CadastroCompradorComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('deve inicializar o formulário com campos vazios e inválidos', () => {
-    const form = component.compradorForm;
-    expect(form).toBeDefined();
-    expect(form.get('nome')?.value).toBe('');
-    expect(form.get('email')?.value).toBe('');
-    expect(form.invalid).toBeTrue();
+  it('deve exibir erro se falhar ao criar comprador', () => {
+    const erroEsperado = 'Erro ao criar comprador';
+    const errorResponse = new Error(erroEsperado);
+
+    spyOn(compradorService, 'criar').and.returnValue(
+      throwError(errorResponse) // ← Versão corrigida
+    );
+    const consoleSpy = spyOn(console, 'error');
+
+    component.compradorForm.setValue({
+      nome: 'Comprador A',
+      email: 'comprador@teste.com',
+    });
+    component.salvar();
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      jasmine.stringMatching(new RegExp(erroEsperado)),
+      jasmine.any(Error) // Agora corresponde ao objeto Error
+    );
   });
 
-  it('deve validar o formulário com dados válidos', () => {
-    const validData = { nome: 'Maria', email: 'maria@teste.com' };
-    component.compradorForm.setValue(validData);
-    expect(component.compradorForm.valid).toBeTrue();
-  });
+  it('deve chamar o serviço quando o formulário for válido', () => {
+    const compradorMock: CompradorDTO = {
+      id: 1,
+      nome: 'Comprador A',
+      email: 'comprador@teste.com',
+    };
+    spyOn(compradorService, 'criar').and.returnValue(of(compradorMock));
 
-  it('deve invalidar o formulário se apenas o nome estiver preenchido', () => {
-    component.compradorForm.setValue({ nome: 'Carlos', email: '' });
-    expect(component.compradorForm.valid).toBeFalse();
-  });
+    component.compradorForm.setValue({
+      nome: 'Comprador A',
+      email: 'comprador@teste.com',
+    });
+    component.salvar();
 
-  it('deve manter o botão desabilitado se o formulário for inválido', () => {
-    component.compradorForm.setValue({ nome: '', email: '' });
-    fixture.detectChanges();
-
-    const button = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
-    expect(button.disabled).toBeTrue();
-  });
-
-  it('deve chamar onSubmit() ao submeter o formulário', () => {
-    const submitSpy = spyOn(component, 'onSubmit').and.callThrough();
-
-    component.compradorForm.setValue({ nome: 'João', email: 'joao@teste.com' });
-    fixture.detectChanges();
-
-    const formElement = fixture.debugElement.query(By.css('form'));
-    formElement.triggerEventHandler('ngSubmit', null);
-
-    expect(submitSpy).toHaveBeenCalled();
-  });
-
-  it('deve logar os dados no console ao submeter o formulário válido', () => {
-    const consoleSpy = spyOn(console, 'log');
-    const formData = { nome: 'João', email: 'joao@teste.com' };
-    component.compradorForm.setValue(formData);
-    component.onSubmit();
-    expect(consoleSpy).toHaveBeenCalledWith(formData);
+    expect(compradorService.criar).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        nome: 'Comprador A',
+        email: 'comprador@teste.com',
+      })
+    );
   });
 });

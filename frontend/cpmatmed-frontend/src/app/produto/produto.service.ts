@@ -1,40 +1,35 @@
+// Classe: ProdutoService - Aplicação: cpmatmed
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Produto {
-  id?: number;
-  nome: string;
-  quantidade: number;
-  precoUnitario: number;
-  pedidoId?: number;
-}
+import { ProdutoDTO } from './dto/produto.dto'; // Usando o DTO correto
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProdutoService {
-  private baseUrl = 'http://localhost:8080/api/produtos';
+  private readonly apiUrl = 'http://localhost:8080/api/produtos';
 
   constructor(private http: HttpClient) {}
 
-  listar(): Observable<Produto[]> {
-    return this.http.get<Produto[]>(this.baseUrl);
+  listar(): Observable<ProdutoDTO[]> {
+    return this.http.get<ProdutoDTO[]>(this.apiUrl);
   }
 
-  buscarPorId(id: number): Observable<Produto> {
-    return this.http.get<Produto>(`${this.baseUrl}/${id}`);
+  buscarPorId(id: number): Observable<ProdutoDTO> {
+    return this.http.get<ProdutoDTO>(`${this.apiUrl}/${id}`);
   }
 
-  criar(produto: Produto): Observable<Produto> {
-    return this.http.post<Produto>(this.baseUrl, produto);
+  criar(produto: ProdutoDTO): Observable<ProdutoDTO> {
+    return this.http.post<ProdutoDTO>(this.apiUrl, produto);
   }
 
-  atualizar(id: number, produto: Produto): Observable<Produto> {
-    return this.http.put<Produto>(`${this.baseUrl}/${id}`, produto);
+  atualizar(id: number, produto: ProdutoDTO): Observable<ProdutoDTO> {
+    return this.http.put<ProdutoDTO>(`${this.apiUrl}/${id}`, produto);
   }
 
   excluir(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

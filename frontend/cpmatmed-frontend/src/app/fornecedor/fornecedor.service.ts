@@ -1,35 +1,32 @@
+// Classe: FornecedorService - Aplicação: cpmatmed
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Fornecedor {
-  id?: number;
-  nome: string;
-}
+import { FornecedorDTO } from './dto/fornecedor.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FornecedorService {
-
-  private apiUrl = 'http://localhost:8080/api/fornecedores'; // Substitua com sua URL real
+  private readonly apiUrl = 'http://localhost:8080/api/fornecedores';
 
   constructor(private http: HttpClient) {}
 
-  criar(fornecedor: Fornecedor): Observable<Fornecedor> {
-    return this.http.post<Fornecedor>(this.apiUrl, fornecedor);
+  listar(): Observable<FornecedorDTO[]> {
+    return this.http.get<FornecedorDTO[]>(this.apiUrl);
   }
 
-  atualizar(id: number, fornecedor: Fornecedor): Observable<Fornecedor> {
-    return this.http.put<Fornecedor>(`${this.apiUrl}/${id}`, fornecedor);
+  buscarPorId(id: number): Observable<FornecedorDTO> {
+    return this.http.get<FornecedorDTO>(`${this.apiUrl}/${id}`);
   }
 
-  buscarPorId(id: number): Observable<Fornecedor> {
-    return this.http.get<Fornecedor>(`${this.apiUrl}/${id}`);
+  criar(fornecedor: FornecedorDTO): Observable<FornecedorDTO> {
+    return this.http.post<FornecedorDTO>(this.apiUrl, fornecedor);
   }
 
-  buscarTodos(): Observable<Fornecedor[]> {
-    return this.http.get<Fornecedor[]>(this.apiUrl);
+  atualizar(id: number, fornecedor: FornecedorDTO): Observable<FornecedorDTO> {
+    return this.http.put<FornecedorDTO>(`${this.apiUrl}/${id}`, fornecedor);
   }
 
   excluir(id: number): Observable<void> {

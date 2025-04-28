@@ -1,5 +1,23 @@
 <div class="container mt-4">
-  <h2>Detalhes do Fornecedor</h2>
-  <p>ID do Fornecedor: {{ fornecedorId }}</p>
-  <!-- Aqui futuramente você pode mostrar nome, CNPJ, produtos fornecidos, etc. -->
+  <!-- Seção de dados do fornecedor -->
+  <div *ngIf="fornecedor; else loadingOrError">
+    <h2>Detalhes do Fornecedor</h2>
+
+    <div class="fornecedor-info">
+      <p><strong>ID do Fornecedor:</strong> {{ fornecedorId }}</p>
+      <p><strong>Nome:</strong> <span class="fornecedor-nome">{{ fornecedor.nome }}</span></p>
+      <p><strong>CNPJ:</strong> {{ fornecedor.cnpj }}</p>
+    </div>
+  </div>
+
+  <!-- Seção de carregamento/erro -->
+  <ng-template #loadingOrError>
+    <div *ngIf="!errorMessage" class="loading-message">
+      Carregando dados do fornecedor...
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message alert alert-danger mt-3">
+      {{ errorMessage }}
+    </div>
+  </ng-template>
 </div>

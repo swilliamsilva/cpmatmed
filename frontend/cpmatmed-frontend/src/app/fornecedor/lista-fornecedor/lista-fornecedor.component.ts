@@ -1,12 +1,16 @@
+// lista-fornecedor.component.ts - cpmatmed
+
 import { Component, OnInit } from '@angular/core';
-import { FornecedorService, Fornecedor } from '../fornecedor.service';
+import { FornecedorService } from '../fornecedor.service';
+import { FornecedorDTO } from '../dto/fornecedor.dto';
 
 @Component({
   selector: 'app-lista-fornecedor',
   templateUrl: './lista-fornecedor.component.html',
 })
 export class ListaFornecedorComponent implements OnInit {
-  fornecedores: Fornecedor[] = [];
+  fornecedores: FornecedorDTO[] = [];
+  errorMessage: string = '';
 
   constructor(private fornecedorService: FornecedorService) {}
 
@@ -15,16 +19,32 @@ export class ListaFornecedorComponent implements OnInit {
   }
 
   carregarFornecedores(): void {
-    this.fornecedorService.buscarTodos().subscribe((dados) => {
-      this.fornecedores = dados;
-    });
+    this.fornecedorService.listar().subscribe(
+      (data) => {
+        if (Array.isArray(data)) {
+          this.fornecedores = data;
+        } else {
+          this.fornecedores = [];
+          console.error('Dados inválidos recebidos para fornecedores');
+        }
+      },
+      (err) => {
+        this.fornecedores = [];
+        console.error('Erro ao carregar fornecedores', err);
+        this.errorMessage = 'Erro ao carregar fornecedores';
+      }
+    );
   }
 
   excluir(id: number): void {
-    if (confirm('Tem certeza que deseja excluir este fornecedor?')) {
-      this.fornecedorService.excluir(id).subscribe(() => {
+    this.fornecedorService.excluir(id).subscribe(
+      () => {
         this.carregarFornecedores();
-      });
-    }
+      },
+      (err) => {
+        console.error('Erro ao excluir fornecedor', err);
+        this.errorMessage = 'Erro ao excluir fornecedor';
+      }
+    );
   }
 }

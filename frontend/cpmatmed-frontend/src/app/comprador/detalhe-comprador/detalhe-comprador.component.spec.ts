@@ -1,22 +1,38 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { DetalheCompradorComponent } from './detalhe-comprador.component';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { MockCompradorService } from '../mock-comprador.service';
+import { CompradorService } from '../comprador.service';
+import { CompradorDTO } from '../dto/comprador.dto';
 
 describe('DetalheCompradorComponent', () => {
   let component: DetalheCompradorComponent;
   let fixture: ComponentFixture<DetalheCompradorComponent>;
+  let compradorService: CompradorService;
+
+  const mockActivatedRoute = {
+    snapshot: {
+      paramMap: {
+        get: (key: string) => '1'
+      }
+    }
+  };
+
+  const mockCompradorService = {
+    getById: (id: number) =>
+      of({
+        id,
+        nome: 'Mock Comprador Detalhe',
+        email: 'mock@email.com'
+      } as CompradorDTO)
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DetalheCompradorComponent],
       providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: { snapshot: { paramMap: { get: () => '1' } } },  // Ajuste para refletir a rota com ID
-        },
-        { provide: 'CompradorService', useClass: MockCompradorService }
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        { provide: CompradorService, useValue: mockCompradorService }
       ]
     }).compileComponents();
   });
@@ -24,6 +40,7 @@ describe('DetalheCompradorComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DetalheCompradorComponent);
     component = fixture.componentInstance;
+    compradorService = TestBed.inject(CompradorService);
     fixture.detectChanges();
   });
 
@@ -31,14 +48,17 @@ describe('DetalheCompradorComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('deve carregar detalhes do comprador no ngOnInit', () => {
-    // Garantir que os detalhes do comprador estejam sendo carregados corretamente
-    expect(component.comprador).toBeTruthy();
-    expect(component.comprador.nome).toBe('Mock Comprador Detalhe'); // Verifica se o nome é o esperado
-  });
+  it('deve carregar detalhes do comprador no ngOnInit', fakeAsync(() => {
+    component.ngOnInit();
+    tick();
 
-  it('deve atribuir o ID correto ao compradorId a partir da rota', () => {
-    // Verifica se o ID do comprador está sendo atribuído corretamente
-    expect(component.compradorId).toBe(1);
+    expect(component.comprador).toBeTruthy();
+    expect(component.comprador.nome).toBe('Mock Comprador Detalhe');
+    expect(component.comprador.email).toBe('mock@email.com');
+  }));
+
+  it('deve atribuir o ID correto ao comprador a partir da rota', () => {
+    component.ngOnInit();
+    expect(component.comprador.id).toBe(1);
   });
 });

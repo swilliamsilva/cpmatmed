@@ -3,7 +3,14 @@
     "baseUrl": "src",
     "paths": {
       "@app/*": ["app/*"]
-    }
+    },
+    "target": "es2015",
+    "lib": ["es2015", "es2018", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true
   },
   "files": [],
   "references": [
