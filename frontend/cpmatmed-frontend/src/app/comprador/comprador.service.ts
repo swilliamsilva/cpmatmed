@@ -9,7 +9,9 @@ import { CompradorDTO } from './dto/comprador.dto';
   providedIn: 'root'
 })
 export class CompradorService {
-  private readonly apiUrl = 'http://localhost:8080/api/compradores';
+  //private readonly apiUrl = 'http://localhost:8080/api/compradores';
+  private readonly apiUrl = '/api/compradores';
+
 
   constructor(private http: HttpClient) {}
 

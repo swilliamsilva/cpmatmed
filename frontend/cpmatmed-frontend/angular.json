@@ -66,7 +66,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "cpmatmed-frontend:build"
+            "browserTarget": "cpmatmed-frontend:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -77,6 +78,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
+            "proxyConfig": "proxy.conf.json",
             "tsConfig": [
               "tsconfig.app.json",
               "tsconfig.spec.json",
@@ -106,6 +108,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
+            "proxyConfig": "proxy.conf.json",
             "assets": [
               "src/favicon.ico",
               "src/assets"

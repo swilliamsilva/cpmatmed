@@ -9,7 +9,8 @@ import { FornecedorDTO } from './dto/fornecedor.dto';
   providedIn: 'root'
 })
 export class FornecedorService {
-  private readonly apiUrl = 'http://localhost:8080/api/fornecedores';
+  // private readonly apiUrl = 'http://localhost:8080/api/fornecedores';
+  private readonly apiUrl = '/api/fornecedores';
 
   constructor(private http: HttpClient) {}
 
