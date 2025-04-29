@@ -9,11 +9,11 @@ const routes: Routes = [
   { path: 'cadastro-pedido', component: CadastroPedidoComponent },
   { path: 'lista-pedido', component: ListaPedidoComponent },
   { path: 'detalhe-pedido/:id', component: DetalhePedidoComponent },
-  { path: '**', redirectTo: 'lista-pedido' }  // Rota inválida redireciona para a lista de pedidos
+  { path: '**', redirectTo: 'lista-pedido' }, // Rota inválida redireciona para a lista de pedidos
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class PedidoRoutingModule {}
