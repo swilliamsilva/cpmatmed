@@ -3,7 +3,11 @@
   <p *ngIf="produtoForm">Formulário está carregado</p>
   <p *ngIf="!produtoForm">Formulário ainda não carregado</p>
 
-  <form [formGroup]="produtoForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="produtoForm" (ngSubmit)="onSubmit()">
+      <!-- Campos do formulário -->
+      
+    
+    
     <div class="form-group mb-3">
       <label for="nome">Nome do Produto</label>
       <input id="nome" type="text" class="form-control" formControlName="nome">
@@ -24,6 +28,7 @@
       <input id="fornecedorId" type="number" class="form-control" formControlName="fornecedorId">
     </div>
 
-    <button type="submit" class="btn btn-success" [disabled]="produtoForm.invalid">Salvar</button>
+      <button type="submit" class="btn btn-success" [disabled]="produtoForm.invalid">Salvar</button>
   </form>
+  
 </div>

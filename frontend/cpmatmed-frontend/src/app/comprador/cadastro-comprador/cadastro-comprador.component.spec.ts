@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { CadastroCompradorComponent } from './cadastro-comprador.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CompradorService } from '../comprador.service';
@@ -42,7 +47,11 @@ describe('CadastroCompradorComponent', () => {
     component = fixture.componentInstance;
     compradorService = TestBed.inject(CompradorService);
     router = TestBed.inject(Router);
+
+    // Configuração do spy genérico para o serviço
+    spyOn(compradorService, 'criar').and.callThrough();
     spyOn(router, 'navigate').and.stub();
+
     fixture.detectChanges();
   });
 
@@ -50,12 +59,13 @@ describe('CadastroCompradorComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('deve exibir erro se falhar ao criar comprador', () => {
+  it('deve exibir erro se falhar ao criar comprador', fakeAsync(() => {
     const erroEsperado = 'Erro ao criar comprador';
     const errorResponse = new Error(erroEsperado);
 
-    spyOn(compradorService, 'criar').and.returnValue(
-      throwError(errorResponse) // ← Versão corrigida
+    // Sobrescreve o spy para retornar erro
+    (compradorService.criar as jasmine.Spy).and.returnValue(
+      throwError(errorResponse)
     );
     const consoleSpy = spyOn(console, 'error');
 
@@ -63,33 +73,56 @@ describe('CadastroCompradorComponent', () => {
       nome: 'Comprador A',
       email: 'comprador@teste.com',
     });
-    component.salvar();
+
+    component.onSubmit();
+    tick();
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      jasmine.stringMatching(new RegExp(erroEsperado)),
-      jasmine.any(Error) // Agora corresponde ao objeto Error
+      'Erro ao criar comprador:',
+      errorResponse
     );
-  });
 
-  it('deve chamar o serviço quando o formulário for válido', () => {
+    expect(component.errorMessage).toBe(
+      `Erro ao criar comprador: ${erroEsperado}`
+    );
+  }));
+
+  it('deve chamar o serviço quando o formulário for válido', fakeAsync(() => {
     const compradorMock: CompradorDTO = {
       id: 1,
       nome: 'Comprador A',
       email: 'comprador@teste.com',
     };
-    spyOn(compradorService, 'criar').and.returnValue(of(compradorMock));
+
+    (compradorService.criar as jasmine.Spy).and.returnValue(of(compradorMock));
 
     component.compradorForm.setValue({
       nome: 'Comprador A',
       email: 'comprador@teste.com',
     });
-    component.salvar();
 
-    expect(compradorService.criar).toHaveBeenCalledWith(
-      jasmine.objectContaining({
-        nome: 'Comprador A',
-        email: 'comprador@teste.com',
-      })
+    component.onSubmit();
+    tick();
+
+    expect(compradorService.criar).toHaveBeenCalledWith({
+      nome: 'Comprador A',
+      email: 'comprador@teste.com',
+    });
+
+    expect(router.navigate).toHaveBeenCalledWith(['/comprador/lista-comprador']);
+  }));
+
+  it('deve exibir mensagem de erro quando formulário for inválido', () => {
+    component.compradorForm.setValue({
+      nome: '',
+      email: 'email-invalido',
+    });
+
+    component.onSubmit();
+
+    expect(component.errorMessage).toBe(
+      'Por favor, corrija os erros no formulário'
     );
+    expect(compradorService.criar).not.toHaveBeenCalled();
   });
 });
