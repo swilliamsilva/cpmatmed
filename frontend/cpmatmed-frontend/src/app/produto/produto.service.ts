@@ -9,7 +9,7 @@ import { ProdutoDTO } from './dto/produto.dto'; // Usando o DTO correto
   providedIn: 'root',
 })
 export class ProdutoService {
- // private readonly apiUrl = 'http://localhost:8080/api/produtos';
+  // private readonly apiUrl = 'http://localhost:8080/api/produtos';
   private readonly apiUrl = '/api/produtos';
 
   constructor(private http: HttpClient) {}

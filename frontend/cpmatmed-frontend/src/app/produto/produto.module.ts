@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http'; // Importe o HttpClientModule aqui
 import { ProdutoRoutingModule } from './produto-routing.module';
 import { ListaProdutoComponent } from './lista-produto/lista-produto.component';
 import { CadastroProdutoComponent } from './cadastro-produto/cadastro-produto.component';
@@ -15,6 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FormsModule,
+    HttpClientModule,  // Adicione o HttpClientModule no array de imports
     ReactiveFormsModule, 
     ProdutoRoutingModule,
   ],

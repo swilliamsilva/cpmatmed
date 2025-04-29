@@ -1,9 +1,10 @@
 // Classe: CompradorService - Aplicação: cpmatmed
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+
 import { Observable } from 'rxjs';
 import { CompradorDTO } from './dto/comprador.dto';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'

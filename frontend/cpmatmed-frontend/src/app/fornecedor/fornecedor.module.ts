@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http'; // Importe o HttpClientModule aqui
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FornecedorRoutingModule } from './fornecedor-routing.module';
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms'; // <-- Adicione
     // Módulos necessários para os componentes de fornecedor
     FormsModule, // <-- Adicione
     CommonModule, // Módulo comum do Angular, necessário para muitos componentes padrões (ngIf, ngFor, etc)
+    HttpClientModule, // Adicione o HttpClientModule no array de imports
     ReactiveFormsModule, // Necessário para formulários reativos
     FornecedorRoutingModule, // Roteamento específico para este módulo
   ],

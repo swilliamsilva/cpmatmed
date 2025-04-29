@@ -2,6 +2,7 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http'; // Importe o HttpClientModule aqui
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { CompradorRoutingModule } from './comprador-routing.module';
@@ -12,14 +13,15 @@ import { DetalheCompradorComponent } from './detalhe-comprador/detalhe-comprador
 @NgModule({
   declarations: [
     ListaCompradorComponent,
-    CadastroCompradorComponent, //<< 
-    DetalheCompradorComponent
+    CadastroCompradorComponent, //<<
+    DetalheCompradorComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
+    HttpClientModule, // Adicione o HttpClientModule no array de imports
     ReactiveFormsModule,
-    CompradorRoutingModule
-  ]
+    CompradorRoutingModule,
+  ],
 })
 export class CompradorModule {}
