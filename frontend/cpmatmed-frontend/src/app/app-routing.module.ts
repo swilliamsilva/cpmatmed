@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'produto/lista-produto', pathMatch: 'full' },
+  { path: '', redirectTo: 'pedido/lista-pedido', pathMatch: 'full' },
   {
     path: 'produto',
     loadChildren: () => import('./produto/produto.module').then(m => m.ProdutoModule),
@@ -19,7 +19,7 @@ const routes: Routes = [
     path: 'pedido',
     loadChildren: () => import('./pedido/pedido.module').then(m => m.PedidoModule),
   },
-  { path: '**', redirectTo: 'produto/lista-produto' },
+  { path: '**', redirectTo: 'pedido/lista-pedido' },
 ];
 
 @NgModule({

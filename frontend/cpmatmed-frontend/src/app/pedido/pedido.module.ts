@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'; // Importe o HttpClientModule aqui
+import { HttpClientModule } from '@angular/common/http'; 
 import { CadastroPedidoComponent } from './cadastro-pedido/cadastro-pedido.component';
 import { DetalhePedidoComponent } from './detalhe-pedido/detalhe-pedido.component';
 import { ListaPedidoComponent } from './lista-pedido/lista-pedido.component';

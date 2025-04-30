@@ -2,84 +2,120 @@
 
 Sistema completo para controle de pedidos médicos e seus respectivos produtos. A solução é composta por um **frontend em Angular** e um **backend em Spring Boot**, com comunicação via API REST.
 
+## 🧩 Estrutura do Projeto
+
+O projeto está dividido em duas aplicações independentes:
+- **Frontend (Angular 10)**: Interface gráfica do sistema.
+- **Backend (Java 8 + Spring Boot)**: API REST com lógica de negócios e persistência de dados.
+
 ---
 
-## 🗂️ Estrutura do Projeto
+## 🚀 Tecnologias Utilizadas
 
-```text
-workspace-cpmatmed/
-├── backend/     # Backend em Java + Spring Boot + PostgreSQL
-├── cpmatmed-frontend/    # Frontend em Angular 18
-└── README.md    # Este arquivo
+### Frontend
+- Angular 10
+- TypeScript
+- RxJS
+- Jasmine & Karma (testes)
 
-Objetivo
-Oferecer uma aplicação simples e eficiente para:
+### Backend
+- Java 8
+- Spring Boot
+- Spring Web
+- Spring Data JPA
+- Banco H2 (ou outro)
+- JUnit & Mockito (testes unitários)
 
-Listagem de pedidos médicos
+---
+## 🛠️ Funcionalidades Principais
 
-Visualização dos produtos associados a um pedido
+- CRUD de **Fornecedores**, **Produtos**, **Compradores** e **Pedidos**.
+- Comunicação entre frontend e backend via HTTP (API REST).
+- Testes unitários para componentes e serviços.
+- Estrutura modular com lazy loading no Angular.
+- Organização em DTOs, Mappers e Controllers no backend.
 
-Registro de novos pedidos
+---
 
-⚙️ Tecnologias Utilizadas
-Backend
-Java 17, Spring Boot
-Spring Data JPA / Hibernate
-PostgreSQL
-JUnit para testes
-Docker
-Maven
+## ▶️ Como Executar o Projeto
 
-Arquivo application.yml para configuração
+### Backend
 
-Frontend
-Angular 18
+## ⚙️ Requisitos
 
-Bootstrap 5
-jQuery (para interações específicas)
-HTML/CSS
-Testes com Jasmine + Karma
+- Java 8+
+- Maven 3+
+- PostgreSQL (em execução local ou via Docker)
+- Sistema operacional: Windows 7 ou compatível
+## ▶️ Como Executar
 
-🚀 Como Executar o Projeto
-1. Clone o repositório
+### Backend (Java)
+1. Abra o projeto em uma IDE como Eclipse ou VS Code.
+2. Compile com Java 8.
+3. Rode a aplicação (`BackendApplication.java`), pela IDE.
+4. A API será exposta em: `http://localhost:8080`.
+5. Para executar
+# Com Maven:
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+mvn test -Dspring.profiles.active=test
+ Ou com JAR:
+java -jar -Dspring.profiles.active=dev target/backend-0.0.1-SNAPSHOT.jar
 
 
-git clone https://github.com/seu-usuario/cpmatmed.git
-cd workspace-cpmatmed
-2. Configure o Backend
-Acesse a pasta:
+### Frontend (Angular)
+1. Acesse a pasta do frontend.
+2. Instale as dependências:
 
-cd backend
-➤ Configure o application.yml com seu banco PostgreSQL.
-➤ Execute com:
-
-mvn clean install
-mvn spring-boot:run
-A API estará disponível em: http://localhost:8080/api/pedidos
-
-3. Configure o Frontend
-Abra uma nova aba e acesse a pasta:
-
-cd frontend
-➤ Instale as dependências:
+```bash
 npm install
-➤ Rode a aplicação:
-ng serve
-A aplicação estará disponível em: http://localhost:4200
 
-🧪 Testes
-cd backend
-
-mvn test
-
-Frontend
-
-cd frontend
+3. Execute o aplicativo.
+ng serve 
+ou
 ng test
-📌 Observações
-O CORS está liberado para desenvolvimento no backend com @CrossOrigin(origins = "*")
+---
 
-Em produção, recomendamos configurar os domínios específicos no CORS.
+## 💾 Configuração do Banco de Dados
 
-O frontend acessa a API via http://localhost:8080/api/pedidos.
+Certifique-se de que o banco de dados `cpmatmed` esteja criado e acessível.
+Exemplo de conexão (`application-dev.properties`):
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/cpmatmed
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+mvn clean install
+
+### 1. Clonar o Repositório
+
+```
+bash
+git clone https://github.com/swilliamsilva/cpmatmed.git
+cd cpmatmed
+
+# CORS - Frontend
+Durante o desenvolvimento, o CORS está aberto para qualquer origem:
+@CrossOrigin(origins = "*")
+
+Para produção, configure especificamente o domínio:
+@CrossOrigin(origins = "http://localhost:4200")
+
+# Exemplo de Resposta: GET /api/pedidos
+
+[
+  {
+    "id": 1,
+    "nomeComprador": "João Silva",
+    "nomeFornecedor": "Farmácia XYZ",
+    "totalProdutos": 10,
+    "valorTotal": 250.0
+  },
+  {
+    "id": 2,
+    "nomeComprador": "Maria Souza",
+    "nomeFornecedor": "Medicamentos ABC",
+    "totalProdutos": 5,
+    "valorTotal": 120.0
+  }
+]
 

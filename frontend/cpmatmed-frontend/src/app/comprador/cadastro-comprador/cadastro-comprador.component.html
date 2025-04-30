@@ -1,20 +1,28 @@
+<!-- CadastrarCompradorComponent - Aplicação: cpmatmed -->
 <div class="container mt-4">
-  <h2>Cadastrar Comprador</h2>
 
-  <form [formGroup]="compradorForm" (ngSubmit)="onSubmit()">
+  <h2 class="form-title">Cadastro de Comprador</h2>
+
+  <form [formGroup]="compradorForm" (ngSubmit)="onSubmit()" class="form-layout">
+
     <!-- Campo Nome -->
-    <div class="form-group mb-3">
+    <div class="form-group">
       <label for="nome">Nome</label>
       <input
         id="nome"
         type="text"
         class="form-control"
         formControlName="nome"
-        [ngClass]="{ 'is-invalid': compradorForm.get('nome')?.invalid && (compradorForm.get('nome')?.dirty || compradorForm.get('nome')?.touched) }"
-        aria-describedby="nomeHelp"
+        [ngClass]="{
+          'is-invalid': compradorForm.get('nome')?.invalid && 
+                        (compradorForm.get('nome')?.dirty || compradorForm.get('nome')?.touched)
+        }"
+      />
+      <div
+        *ngIf="compradorForm.get('nome')?.invalid && 
+               (compradorForm.get('nome')?.dirty || compradorForm.get('nome')?.touched)"
+        class="invalid-feedback"
       >
-      <div *ngIf="compradorForm.get('nome')?.invalid && (compradorForm.get('nome')?.dirty || compradorForm.get('nome')?.touched)"
-           class="invalid-feedback">
         <span *ngIf="compradorForm.get('nome')?.errors?.required">
           Nome é obrigatório
         </span>
@@ -22,18 +30,23 @@
     </div>
 
     <!-- Campo Email -->
-    <div class="form-group mb-3">
+    <div class="form-group">
       <label for="email">Email</label>
       <input
         id="email"
         type="email"
         class="form-control"
         formControlName="email"
-        [ngClass]="{ 'is-invalid': compradorForm.get('email')?.invalid && (compradorForm.get('email')?.dirty || compradorForm.get('email')?.touched) }"
-        aria-describedby="emailHelp"
+        [ngClass]="{
+          'is-invalid': compradorForm.get('email')?.invalid &&
+                        (compradorForm.get('email')?.dirty || compradorForm.get('email')?.touched)
+        }"
+      />
+      <div
+        *ngIf="compradorForm.get('email')?.invalid &&
+               (compradorForm.get('email')?.dirty || compradorForm.get('email')?.touched)"
+        class="invalid-feedback"
       >
-      <div *ngIf="compradorForm.get('email')?.invalid && (compradorForm.get('email')?.dirty || compradorForm.get('email')?.touched)"
-           class="invalid-feedback">
         <span *ngIf="compradorForm.get('email')?.errors?.required">
           Email é obrigatório
         </span>
@@ -43,21 +56,24 @@
       </div>
     </div>
 
-    <!-- Botão e Mensagens -->
-    <button
-      type="submit"
-      class="btn btn-primary me-2"
-      [disabled]="compradorForm.invalid"
-    >
-      Salvar
-    </button>
+    <!-- Botão e Mensagem -->
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="compradorForm.invalid"
+      >
+        Salvar
+      </button>
+    </div>
 
     <div
       *ngIf="errorMessage"
-      class="alert alert-danger mt-3"
+      class="alert alert-danger"
       role="alert"
     >
       {{ errorMessage }}
     </div>
+
   </form>
 </div>

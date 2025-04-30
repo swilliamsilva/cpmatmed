@@ -9,7 +9,7 @@ import { PedidoDTO } from './dto/pedido.dto'; // Usando o DTO correto
   providedIn: 'root'
 })
 export class PedidoService {
-//  private readonly apiUrl = 'http://localhost:8080/api/pedidos'; // ajuste feito para manter a padronização
+
   private readonly apiUrl = '/api/pedidos';
 
   constructor(private http: HttpClient) {}

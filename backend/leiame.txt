@@ -1,62 +1,107 @@
+﻿# 💊 CPMatMed - Controle de Pedido de Material e Medicamento
 
-# Backend do Projeto CPMatMed
+Sistema completo para controle de pedidos médicos e seus respectivos produtos. A solução é composta por um **frontend em Angular** e um **backend em Spring Boot**, com comunicação via API REST.
 
-## Descrição
+## 🧩 Estrutura do Projeto
 
-Este é o backend do projeto **CPMatMed** (Controle de Pedido de Material e Medicamento).
-O backend foi desenvolvido utilizando Java 17, Spring Boot e Hibernate, 
-com um banco de dados PostgreSQL para persistência. 
-O projeto segue a arquitetura RESTful, fornecendo endpoints para
-gestão de pedidos e produtos.
+O projeto está dividido em duas aplicações independentes:
+- **Frontend (Angular 10)**: Interface gráfica do sistema.
+- **Backend (Java 8 + Spring Boot)**: API REST com lógica de negócios e persistência de dados.
 
-## Requisitos
+---
 
-Antes de executar o backend, verifique os seguintes pré-requisitos:
+## 🚀 Tecnologias Utilizadas
 
-- **Java 17** ou superior.
-- **Maven** para construção do projeto.
-- **PostgreSQL** configurado e em execução pelo docker.
+### Frontend
+- Angular 10
+- TypeScript
+- RxJS
+- Jasmine & Karma (testes)
 
-## Configuração do Backend
+### Backend
+- Java 8
+- Spring Boot
+- Spring Web
+- Spring Data JPA
+- Banco H2 (ou outro)
+- JUnit & Mockito (testes unitários)
 
-### Passo 1: Clonar o Repositório
+---
+## 🛠️ Funcionalidades Principais
 
-Configure o banco de dados PostgreSQL com a seguinte URL de conexão:
+- CRUD de **Fornecedores**, **Produtos**, **Compradores** e **Pedidos**.
+- Comunicação entre frontend e backend via HTTP (API REST).
+- Testes unitários para componentes e serviços.
+- Estrutura modular com lazy loading no Angular.
+- Organização em DTOs, Mappers e Controllers no backend.
 
-Banco de Dados: cpmatmed
+---
+
+## ▶️ Como Executar o Projeto
+
+### Backend
+
+## ⚙️ Requisitos
+
+- Java 8+
+- Maven 3+
+- PostgreSQL (em execução local ou via Docker)
+- Sistema operacional: Windows 7 ou compatível
+## ▶️ Como Executar
+
+### Backend (Java)
+1. Abra o projeto em uma IDE como Eclipse ou VS Code.
+2. Compile com Java 8.
+3. Rode a aplicação (`BackendApplication.java`), pela IDE.
+4. A API será exposta em: `http://localhost:8080`.
+5. Para executar
+# Com Maven:
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+mvn test -Dspring.profiles.active=test
+ Ou com JAR:
+java -jar -Dspring.profiles.active=dev target/backend-0.0.1-SNAPSHOT.jar
 
 
-  datasource:
-    url: jdbc:postgresql://db:5432/dbpmatmed
-    username: postgres
-    password: postgres
-Para compilar o backend, você pode usar Maven 
+### Frontend (Angular)
+1. Acesse a pasta do frontend.
+2. Instale as dependências:
 
-Se estiver usando Maven, execute:
+```bash
+npm install
+
+3. Execute o aplicativo.
+ng serve 
+ou
+ng test
+---
+
+## 💾 Configuração do Banco de Dados
+
+Certifique-se de que o banco de dados `cpmatmed` esteja criado e acessível.
+Exemplo de conexão (`application-dev.properties`):
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/cpmatmed
+spring.datasource.username=postgres
+spring.datasource.password=postgres
 mvn clean install
 
-Clonando o repositório para seu ambiente local:
+### 1. Clonar o Repositório
 
-git clone <URL_DO_REPOSITORIO>
-cd cpmatmed-backend
+```
+bash
+git clone https://github.com/swilliamsilva/cpmatmed.git
+cd cpmatmed
 
-# Executando o Backend
-Para executar o backend, use o seguinte comando:
+# CORS - Frontend
+Durante o desenvolvimento, o CORS está aberto para qualquer origem:
+@CrossOrigin(origins = "*")
 
-java -jar -Dspring.profiles.active=dev target/cpmatmed-backend.jar
+Para produção, configure especificamente o domínio:
+@CrossOrigin(origins = "http://localhost:4200")
 
-API Endpoints
-O backend expõe os seguintes endpoints para interação com o frontend:
-GET /api/pedidos: Retorna uma lista de todos os pedidos.
-GET /api/pedidos/{id}: Retorna os detalhes de um pedido específico, incluindo os produtos.
-POST /api/pedidos: Cria um novo pedido.
+# Exemplo de Resposta: GET /api/pedidos
 
-Exemplo de resposta para GET /api/pedidos:
-
-json
-Sempre exibir os detalhes
-
-Copiar
 [
   {
     "id": 1,
@@ -73,19 +118,4 @@ Copiar
     "valorTotal": 120.0
   }
 ]
-# CORS (Cross-Origin Resource Sharing)
-O CORS está configurado no backend para aceitar requisições de qualquer 
-origem durante o desenvolvimento
- (através da anotação @CrossOrigin(origins = "*")).
 
-Em produção, você deve restringir o CORS para o domínio do frontend. 
-Para isso, edite o código da seguinte forma:
-
-@CrossOrigin(origins = "http://localhost:4200")
-
-# Contribuição
-Caso deseje contribuir para o projeto, basta seguir as etapas abaixo:
-
-Faça um fork do repositório.
-Crie uma nova branch para a funcionalidade ou correção.
-Envie um pull request com a descrição da alteração.

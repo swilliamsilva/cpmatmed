@@ -1,20 +1,33 @@
-<!-- CadastroFornecedorComponent.html - Aplicação: cpmatmed -->
+<!-- CadastroFornecedorComponent - Aplicação: cpmatmed -->
+<div class="container mt-4 cadastro-fornecedor">
 
+  <h2 class="form-title">{{ fornecedor.id ? 'Editar' : 'Novo' }} Fornecedor</h2>
 
+  <form (ngSubmit)="salvar()" class="form-box">
 
-<h2>{{ fornecedor.id ? 'Editar' : 'Novo' }} Fornecedor</h2>
+    <!-- Campo Nome -->
+    <div class="form-group">
+      <label for="nome">Nome:</label>
+      <input
+        id="nome"
+        [(ngModel)]="fornecedor.nome"
+        name="nome"
+        class="form-control"
+        required
+      />
+    </div>
 
-<form (ngSubmit)="salvar()">
-  <div class="form-group">
-    <label>Nome:</label>
-    <input [(ngModel)]="fornecedor.nome" name="nome" class="form-control" required />
-  </div>
-<!-- Adicione a exibição da mensagem de erro -->
-<div *ngIf="errorMessage" class="alert alert-danger">
-  {{ errorMessage }}
+    <!-- Mensagem de erro -->
+    <div *ngIf="errorMessage" class="form-error">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Botões -->
+    <div class="form-actions">
+      <button type="submit" class="btn-salvar">Salvar</button>
+      <a routerLink="/fornecedor/lista-fornecedor" class="btn-cancelar">Cancelar</a>
+    </div>
+
+  </form>
+
 </div>
-
-<!-- Restante do template permanece igual -->
-  <button type="submit" class="btn btn-success">Salvar</button>
-  <a routerLink="/fornecedor/lista-fornecedor" class="btn btn-secondary">Cancelar</a>
-</form>

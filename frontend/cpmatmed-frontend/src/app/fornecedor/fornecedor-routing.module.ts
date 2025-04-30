@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'lista-fornecedor', component: ListaFornecedorComponent },
   { path: 'cadastro-fornecedor', component: CadastroFornecedorComponent },
   { path: 'detalhe-fornecedor/:id', component: DetalheFornecedorComponent },
-  { path: '**', redirectTo: 'lista-fornecedor' }  // Redireciona rotas inválidas para a lista de fornecedores
+  { path: '**', redirectTo: 'cadastro-fornecedor' }  // Redireciona rotas inválidas para a lista de fornecedores
 ];
 
 @NgModule({

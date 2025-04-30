@@ -1,0 +1,36 @@
+// lista-pedido.component.scss - Aplicação: cpmatmed
+
+.container {
+  max-width: 800px;
+  margin: auto;
+
+  h2 {
+    color: #0d6efd; // Bootstrap primary
+    font-weight: 600;
+  }
+}
+
+.list-group-item {
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+
+  .btn-outline-primary {
+    min-width: 100px;
+    text-align: center;
+  }
+
+  strong {
+    font-size: 1rem;
+  }
+
+  small {
+    font-size: 0.85rem;
+  }
+}
+
+.alert {
+  font-weight: 500;
+}

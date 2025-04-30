@@ -1,34 +1,62 @@
+<!-- CadastroProdutoComponent.html - Aplicação: cpmatmed -->
+
 <div class="container mt-4">
   <h2>Cadastrar Produto</h2>
-  <p *ngIf="produtoForm">Formulário está carregado</p>
-  <p *ngIf="!produtoForm">Formulário ainda não carregado</p>
 
-    <form [formGroup]="produtoForm" (ngSubmit)="onSubmit()">
-      <!-- Campos do formulário -->
-      
+  <!-- Mensagens de feedback -->
+    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+    </div>
+
+
+  <!-- Verificação do carregamento do formulário -->
+  <p *ngIf="produtoForm; else loadingForm">Formulário carregado com sucesso.</p>
+  <ng-template #loadingForm>
+    <p>Formulário ainda não carregado.</p>
+  </ng-template>
+
+  <!-- Formulário de cadastro -->
+  <form [formGroup]="produtoForm" (ngSubmit)="onSubmit()">
     
-    
+    <!-- Nome do Produto -->
     <div class="form-group mb-3">
-      <label for="nome">Nome do Produto</label>
-      <input id="nome" type="text" class="form-control" formControlName="nome">
+      <label for="nome">Nome do Produto....:</label>
+      <input id="nome" type="text" class="form-control" formControlName="nome" required />
+      <div *ngIf="produtoForm.controls['nome'].invalid && produtoForm.controls['nome'].touched" class="text-danger">
+        Nome é obrigatório.
+      </div>
     </div>
 
+    <!-- Preço Unitário -->
     <div class="form-group mb-3">
-      <label for="precoUnitario">Preço Unitário</label>
-      <input id="precoUnitario" type="number" class="form-control" formControlName="precoUnitario">
+      <label for="precoUnitario">Preço Unitário............: </label>
+      <input id="precoUnitario" type="number" class="form-control" formControlName="precoUnitario" required />
+      <div *ngIf="produtoForm.controls['precoUnitario'].invalid && produtoForm.controls['precoUnitario'].touched" class="text-danger">
+        Preço unitário é obrigatório.
+      </div>
     </div>
 
+    <!-- Quantidade -->
     <div class="form-group mb-3">
-      <label for="quantidade">Quantidade</label>
-      <input id="quantidade" type="number" class="form-control" formControlName="quantidade">
+      <label for="quantidade">Quantidade..................: </label>
+      <input id="quantidade" type="number" class="form-control" formControlName="quantidade" required />
+      <div *ngIf="produtoForm.controls['quantidade'].invalid && produtoForm.controls['quantidade'].touched" class="text-danger">
+        Quantidade é obrigatória.
+      </div>
     </div>
 
+    <!-- Fornecedor -->
     <div class="form-group mb-3">
-      <label for="fornecedorId">Fornecedor</label>
-      <input id="fornecedorId" type="number" class="form-control" formControlName="fornecedorId">
+      <label for="fornecedorId">Fornecedor...................: </label>
+      <input id="fornecedorId" type="number" class="form-control" formControlName="fornecedorId" required />
+      <div *ngIf="produtoForm.controls['fornecedorId'].invalid && produtoForm.controls['fornecedorId'].touched" class="text-danger">
+        Fornecedor é obrigatório.
+      </div>
     </div>
 
-      <button type="submit" class="btn btn-success" [disabled]="produtoForm.invalid">Salvar</button>
-  </form>
+    <!-- Botão de envio -->
+    <button type="submit" class="btn btn-success" [disabled]="produtoForm.invalid">Salvar</button>
   
+  </form>
+ 
 </div>

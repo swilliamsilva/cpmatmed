@@ -1,0 +1,46 @@
+// cpmatmed - detalhe-fornecedor.component.scss
+
+.detalhe-fornecedor {
+  max-width: 600px;
+  margin: auto;
+
+  .titulo {
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .fornecedor-info {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+
+    p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    .fornecedor-nome {
+      font-weight: 500;
+    }
+  }
+
+  .loading-message {
+    text-align: center;
+    font-style: italic;
+    color: #777;
+    margin-top: 2rem;
+  }
+
+  .error-message {
+    color: #a94442;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-top: 2rem;
+    text-align: center;
+  }
+}

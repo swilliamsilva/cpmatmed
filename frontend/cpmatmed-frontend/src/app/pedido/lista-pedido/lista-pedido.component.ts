@@ -4,7 +4,7 @@ import { PedidoService } from '../pedido.service';
 @Component({
   selector: 'app-lista-pedido',
   templateUrl: './lista-pedido.component.html',
-  styleUrls: ['./lista-pedido.component.scss'],
+ // styleUrls: ['./lista-pedido.component.scss'],
 })
 export class ListaPedidoComponent implements OnInit {
   pedidos: any[] = [];
@@ -17,7 +17,7 @@ export class ListaPedidoComponent implements OnInit {
   ngOnInit(): void {
     this.carregarPedidos();
   }
-  pedido = [{ id: 1, descricao: 'Pedido de Teste', dataCriacao: '2025-04-29' }];
+ 
 
   carregarPedidos(): void {
     this.pedidoService.listar().subscribe({
