@@ -61,6 +61,9 @@ mvn test -Dspring.profiles.active=test
  Ou com JAR:
 java -jar -Dspring.profiles.active=dev target/backend-0.0.1-SNAPSHOT.jar
 
+mvn spring-boot:run -Dspring-boot.run.profiles=prod
+
+
 
 ### Frontend (Angular)
 1. Acesse a pasta do frontend.
