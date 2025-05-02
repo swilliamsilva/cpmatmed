@@ -1,9 +1,8 @@
 [phases.setup]
-nixPkgs = ["openjdk8", "maven"]
+nixPkgs = ['jdk8', 'maven']
 
 [phases.build]
-cmds = ["cd backend && mvn package -DskipTests"]
+cmds = ['cd backend && mvn clean install']
 
 [start]
-cmd = "java -Dspring.profiles.active=dev -jar backend/target/*.jar"
-
+cmd = 'java -jar backend/target/backend-0.0.1-SNAPSHOT.jar'
