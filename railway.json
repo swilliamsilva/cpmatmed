@@ -10,7 +10,7 @@
           "cmds": ["cd backend", "mvn clean package -DskipTests"]
         },
         "start": {
-          "cmds": ["cd backend", "java -jar target/backend-0.0.1-SNAPSHOT.jar"]
+          "cmds": ["./start.sh"]
         }
       }
     }
