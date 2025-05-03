@@ -63,6 +63,16 @@ java -jar -Dspring.profiles.active=dev target/backend-0.0.1-SNAPSHOT.jar
 
 mvn spring-boot:run -Dspring-boot.run.profiles=prod
 
+Na Web pode executar usando railways
+
+https://daring-wonder.up.railway.app
+https://cpmatmed.up.railway.app/api/pedidos
+  
+pelo postman
+GET https://cpmatmed.up.railway.app/api/pedidos
+
+
+
 
 
 ### Frontend (Angular)
