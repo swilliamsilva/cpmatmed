@@ -1,3 +1,8 @@
+[build]
+  base = "java"
+  dir = "cpmatmed/backend"
+  buildCommand = "./mvn clean package"
+
 [phases.setup]
 nixPkgs = ['jdk8', 'maven']
 
