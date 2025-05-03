@@ -113,6 +113,7 @@
 
     <!-- Configuração de Build -->
     <build>
+    <finalName>backend</finalName>
         <!-- Recursos -->
         <resources>
             <resource>
