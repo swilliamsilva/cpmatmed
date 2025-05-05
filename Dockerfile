@@ -3,7 +3,7 @@ COPY backend /cpmatmed/backend
 COPY start.sh /cpmatmed/start.sh
 
 # Define diretório de trabalho
-WORKDIR /cpmatmed/backend
+WORKDIR /cpmatmed/backend/target
 
 # Dá permissão de execução
 RUN chmod +x start.sh
