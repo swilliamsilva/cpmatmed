@@ -1,12 +1,29 @@
-# Copia os arquivos
-COPY backend /cpmatmed/backend
-COPY start.sh /cpmatmed/start.sh
+# Estagio de construcao (build)
+FROM maven:3.6.3-jdk-8 AS builder
 
-# Define diretório de trabalho
-WORKDIR /backend
+# Copia o codigo do backend para a pasta /app/backend
+COPY backend /app/backend
 
-# Dá permissão de execução
+# Compila o projeto Maven
+WORKDIR /app/backend
+RUN mvn clean package -DskipTests
+
+# --------------------------------------------
+
+# Estagio de execucao (imagem final leve)
+FROM openjdk:8-jre-alpine
+
+# Diretorio de trabalho final
+WORKDIR /cpmatmed
+
+# Copia o JAR gerado no estagio anterior
+COPY --from=builder /app/backend/target/backend-0.0.1-SNAPSHOT.jar ./backend.jar
+
+# Copia o script de inicializacao
+COPY start.sh ./start.sh
+
+# Torna o script executavel
 RUN chmod +x start.sh
 
-# Executa o script
+# Comando para iniciar a aplicacao
 CMD ["./start.sh"]

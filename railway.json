@@ -8,7 +8,6 @@
         },
         "build": {
           "cmds": [
-            "chmod 755 ./start.sh",
             "chmod +x ./start.sh",
             "cd backend",
             "mvn clean package -DskipTests"
