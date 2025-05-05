@@ -7,7 +7,11 @@
           "nixPkgs": ["jdk8", "maven"]
         },
         "build": {
-          "cmds": ["cd backend", "mvn clean package -DskipTests"]
+          "cmds": [
+            "chmod +x ./start.sh",
+            "cd backend",
+            "mvn clean package -DskipTests"
+          ]
         },
         "start": {
           "cmds": ["./start.sh"]
