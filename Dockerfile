@@ -2,10 +2,10 @@
 FROM maven:3.6.3-jdk-8 AS builder
 
 # Copia o codigo do backend para a pasta /app/backend
-COPY backend /app/backend
+COPY backend /cpmatmed/backend
 
 # Compila o projeto Maven
-WORKDIR /app/backend
+WORKDIR /cpmatmed/backend
 RUN mvn clean package -DskipTests
 
 # --------------------------------------------
@@ -17,7 +17,7 @@ FROM openjdk:8-jre-alpine
 WORKDIR /cpmatmed
 
 # Copia o JAR gerado no estagio anterior
-COPY --from=builder /app/backend/target/backend-0.0.1-SNAPSHOT.jar ./backend.jar
+COPY --from=builder /cpmatmed/backend/target/backend-0.0.1-SNAPSHOT.jar ./backend.jar
 
 # Copia o script de inicializacao
 COPY start.sh ./start.sh
