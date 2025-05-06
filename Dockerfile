@@ -16,6 +16,7 @@ FROM openjdk:8-jre-alpine
 WORKDIR /app
 
 # Copia o JAR gerado para o diretório atual
+
 COPY --from=builder /build/target/*.jar ./backend.jar
 
 # Copia o script de inicialização
@@ -25,4 +26,5 @@ COPY start.sh .
 RUN chmod +x start.sh
 
 # Define o comando de inicialização
-CMD ["./start.sh"]
+
+CMD ["./start.sh", "--spring.profiles.active=prod"]

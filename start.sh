@@ -1,15 +1,19 @@
 #!/bin/bash
 echo "Aguardando PostgreSQL iniciar..."
 
-# Configurações padrão do Railway
-PGHOST=${PGHOST:-postgres}  # Usa o nome do serviço PostgreSQL do Railway
-PGPORT=${PGPORT:-5432}
+MAX_ATTEMPTS=30
+ATTEMPT=0
 
-# Espera até que o PostgreSQL esteja disponível
-until nc -z $PGHOST $PGPORT; do
-  echo "PostgreSQL não disponível. Aguardando..."
-  sleep 2
+until nc -z $PGHOST $PGPORT || [ $ATTEMPT -eq $MAX_ATTEMPTS ]; do
+    echo "Tentativa $((ATTEMPT+1))/$MAX_ATTEMPTS..."
+    sleep 2
+    ATTEMPT=$((ATTEMPT+1))
 done
 
-echo "PostgreSQL pronto! Iniciando aplicação..."
-exec java -jar backend.jar --spring.profiles.active=prod
+if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+    echo "Falha ao conectar ao PostgreSQL após $MAX_ATTEMPTS tentativas. Abortando..."
+    exit 1
+fi
+
+echo "PostgreSQL pronto! Iniciando a aplicação..."
+exec java -jar backend.jar "$@"  # Passa argumentos adicionais (como --spring.profiles.active)
