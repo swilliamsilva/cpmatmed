@@ -1,11 +1,11 @@
 # ------------------------------
 # Estágio de construção (build)
 # ------------------------------
-FROM maven:3.6.3-jdk-8 AS builder
+FROM maven:3.8.6-jdk-8 AS builder  
 
 WORKDIR /build
 
-# Copia o pom.xml e código-fonte
+# Copia o backend (caminho relativo ao contexto de build "cpmatmed")
 COPY backend/pom.xml .
 COPY backend/src ./src
 

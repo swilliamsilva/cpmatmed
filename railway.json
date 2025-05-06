@@ -1,6 +1,6 @@
 {
   "build": {
-    "builder": "dockerfile" // Remove o Nixpacks e usa apenas o Dockerfile
+    "builder": "dockerfile"
   },
   "services": [
     {
