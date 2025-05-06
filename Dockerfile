@@ -10,7 +10,7 @@ COPY backend/pom.xml .
 COPY backend/src ./src
 
 # Compila o projeto e gera o JAR
-RUN mvn clean package -DskipTests
+RUN mvn clean package -DskipTests && ls -l /build/target/  # Verificação aqui
 
 # ------------------------------
 # Estágio final de execução
