@@ -3,13 +3,15 @@
 # ------------------------------
 FROM maven:3.6.3-jdk-8 AS builder
 
-# Define o diretório de trabalho
-WORKDIR /cpmatmed/backend
+# Diretório de trabalho no estágio de build
+WORKDIR /build
 
-# Copia o código-fonte do backend
-COPY backend /cpmatmed/backend
+# Copia APENAS o backend (dentro de cpmatmed)
+COPY cpmatmed/backend/pom.xml .
+COPY cpmatmed/backend/src ./src
 
-# Compila o projeto Maven (sem testes)
+# Baixa dependências e compila o projeto
+RUN mvn dependency:go-offline
 RUN mvn clean package -DskipTests
 
 # ------------------------------
@@ -17,17 +19,13 @@ RUN mvn clean package -DskipTests
 # ------------------------------
 FROM openjdk:8-jre-alpine
 
-# Define o diretório de trabalho
-WORKDIR /cpmatmed/backend
+# Diretório de trabalho final (dentro de cpmatmed)
+WORKDIR /cpmatmed
 
-# Copia o JAR gerado no build
-COPY --from=builder /cpmatmed/backend/target/backend-0.0.1-SNAPSHOT.jar backend.jar
+# Copia o JAR e o script de inicialização
+COPY --from=builder /build/target/backend-*.jar ./backend.jar
+COPY cpmatmed/start.sh .
 
-# Copia o script de inicialização
-COPY start.sh start.sh
-
-# Permissão de execução para o script
+# Permissões e execução
 RUN chmod +x start.sh
-
-# Comando de entrada
 CMD ["./start.sh"]
