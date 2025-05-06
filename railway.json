@@ -1,23 +1,6 @@
 {
   "build": {
-    "builder": "NIXPACKS",
-    "nixpacksPlan": {
-      "phases": {
-        "setup": {
-          "nixPkgs": ["jdk8", "maven"]
-        },
-        "build": {
-          "cmds": [
-            "chmod +x ./start.sh",
-            "cd backend",
-            "mvn clean package -DskipTests"
-          ]
-        },
-        "start": {
-          "cmds": ["./start.sh"]
-        }
-      }
-    }
+    "builder": "dockerfile" // Remove o Nixpacks e usa apenas o Dockerfile
   },
   "services": [
     {
