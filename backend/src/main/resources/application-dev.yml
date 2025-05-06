@@ -1,0 +1,37 @@
+# application-dev.yml - Configurações de desenvolvimento local
+spring:
+  application:
+    name: cpmatmed-backend
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dbpmatmed
+    username: postgres
+    password: SAMUEL  # Considere usar variável de ambiente em produção
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 30000  # 30 segundos
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # Atualiza schema automaticamente (não usar em produção)
+    show-sql: true  # Exibe SQL no console
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true  # Formata SQL para melhor leitura
+    open-in-view: false  # Melhor prática para evitar LazyInitializationException
+
+  # Configurações CORS
+  mvc:
+    cors:
+      allowed-origins: "*"  # Permite todos os origens (ajuste para produção)
+
+# Configuração do Actuator (Health Checks)
+management:
+  endpoint:
+    health:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health

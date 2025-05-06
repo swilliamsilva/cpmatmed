@@ -1,23 +1,10 @@
-# Configurações comuns a todos os perfis
 spring:
+  config:
+    activate:
+      on-profile: default
   application:
-    name: cpmatmed-backend
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-  sql:
-    init:
-      mode: never
-      encoding: UTF-8
-  mvc:
-    cors:
-      allowed-origins: "*"
+    name: ${SPRING_APPLICATION_NAME:cpmatmed-backend}
 
-# Actuator Config (Health Check)
 management:
   endpoint:
     health:
@@ -28,54 +15,10 @@ management:
         include: health
 
 ---
-# Perfil de Desenvolvimento
+# Configurações carregadas apenas se nenhum perfil estiver ativo
 spring:
-  config:
-    activate:
-      on-profile: dev
+  profiles: default
   datasource:
-    url: jdbc:postgresql://localhost:5432/db_cpmatmed_dev
-    username: postgres
-    password: devpassword
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-
----
-# Perfil de Teste
-spring:
-  config:
-    activate:
-      on-profile: test
-  datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
-    username: sa
-    password: password
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-      dialect: org.hibernate.dialect.H2Dialect
-
----
-# Perfil de Produção
-spring:
-  config:
-    activate:
-      on-profile: prod
-  datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USER}
-    password: ${DATABASE_PASSWORD}
-  mvc:
-    cors:
-      allowed-origins: "https://cpmatmed-backend.railway.app"
-
-management:
-  endpoints:
-    web:
-      base-path: /internal
-      exposure:
-        include: health
-    health:
-      show-details: never
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/db_cpmatmed} # Valor padrão
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:senha}

@@ -1,0 +1,39 @@
+# application-test.yml - Configurações para ambiente de teste
+spring:
+  config:
+    activate:
+      on-profile: test
+  
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ''
+    hikari:
+      connection-timeout: 30000  # 30 segundos
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true  # Carrega data.sql após inicialização do JPA
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql  # Arquivo com dados iniciais para testes
+
+  flyway:
+    enabled: false  # Desabilita Flyway em testes
+
+  h2:
+    console:
+      enabled: true   # Habilita console do H2 em http://localhost:8080/h2-console
+      path: /h2-console
+
+  mvc:
+    cors:
+      allowed-origins: '*'  # Permite CORS para testes

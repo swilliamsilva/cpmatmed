@@ -1,17 +1,15 @@
 #!/bin/bash
-echo "Aguardando o PostgreSQL iniciar..."
+echo "Aguardando PostgreSQL iniciar..."
 
-# Espera até o PostgreSQL estar disponível
+# Configurações padrão do Railway
+PGHOST=${PGHOST:-postgres}  # Usa o nome do serviço PostgreSQL do Railway
+PGPORT=${PGPORT:-5432}
+
+# Espera até que o PostgreSQL esteja disponível
 until nc -z $PGHOST $PGPORT; do
-  echo "PostgreSQL não está disponível. Aguardando..."
+  echo "PostgreSQL não disponível. Aguardando..."
   sleep 2
 done
 
-echo "PostgreSQL está pronto! Iniciando a aplicação..."
-
-# Loop para reiniciar em caso de crash
-while true; do
-  java -jar backend.jar
-  echo "Aplicação crashou. Reiniciando em 5 segundos..."
-  sleep 5
-done
+echo "PostgreSQL pronto! Iniciando aplicação..."
+exec java -jar backend.jar --spring.profiles.active=prod

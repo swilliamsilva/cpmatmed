@@ -1,0 +1,50 @@
+# application-prod.yml - Configurações de Produção (Railway)
+spring:
+  config:
+    activate:
+      on-profile: prod
+  
+  application:
+    name: cpmatmed-backend
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}          # Injeta via variável do Railway
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 30000            # 30 segundos (ajuste conforme necessidade)
+
+  jpa:
+    hibernate:
+      ddl-auto: validate                   # Valida schema sem modificar
+    show-sql: false                        # Não exibe SQL em produção
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true              # Cria baseline se não existir versões
+    validate-on-migrate: false             # Desabilita se precisar corrigir migrações
+
+  mvc:
+    cors:
+      allowed-origins: https://app.cpmatmed.com.br  # Domínio oficial
+
+  sql:
+    init:
+      mode: never                          # Não executa scripts SQL automáticos
+
+server:
+  port: 8080                               # Porta padrão do Railway
+
+management:
+  endpoint:
+    health:
+      show-details: never                  # Não expõe detalhes sensíveis
+  endpoints:
+    web:
+      exposure:
+        include: health                    # Expõe apenas health check

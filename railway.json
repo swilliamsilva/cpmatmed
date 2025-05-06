@@ -1,6 +1,11 @@
 {
   "build": {
-    "builder": "dockerfile"
+    "builder": "dockerfile",
+    "dockerfilePath": "cpmatmed/Dockerfile", 
+    "buildCommand": "mvn clean package -DskipTests", 
+    "environment": {
+      "SPRING_PROFILES_ACTIVE": "prod" 
+    }
   },
   "services": [
     {
@@ -9,9 +14,15 @@
         "image": "postgres:14-alpine",
         "port": 5432,
         "variables": {
+
           "POSTGRES_USER": "postgres",
           "POSTGRES_PASSWORD": "CzvAukGtQLfJymGQpfKvERveaIuXnLMk",
-          "POSTGRES_DB": "railway"
+          "POSTGRES_DB": "railway",
+          
+   
+          "SPRING_DATASOURCE_URL": "jdbc:postgresql://${{PostgreSQL.HOST}}:${{PostgreSQL.PORT}}/${{PostgreSQL.DATABASE}}",
+          "SPRING_DATASOURCE_USERNAME": "${{PostgreSQL.USER}}",
+          "SPRING_DATASOURCE_PASSWORD": "${{PostgreSQL.PASSWORD}}"
         }
       }
     }
