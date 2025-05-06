@@ -14,7 +14,9 @@ FROM openjdk:8-jre-alpine
 WORKDIR /app
 
 # Copia o JAR da etapa de build
-COPY --from=builder /build/target/*.jar ./backend.jar
+RUN mkdir -p backend/target
+COPY --from=builder /build/target/*.jar backend/target/backend.jar
+
 RUN ls -lh /app
 
 
