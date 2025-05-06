@@ -1,29 +1,33 @@
-# Estagio de construcao (build)
+# ------------------------------
+# Estágio de construção (build)
+# ------------------------------
 FROM maven:3.6.3-jdk-8 AS builder
 
-# Copia o codigo do backend para a pasta /app/backend
+# Define o diretório de trabalho
+WORKDIR /cpmatmed/backend
+
+# Copia o código-fonte do backend
 COPY backend /cpmatmed/backend
 
-# Compila o projeto Maven
-WORKDIR /cpmatmed/backend
+# Compila o projeto Maven (sem testes)
 RUN mvn clean package -DskipTests
 
-# --------------------------------------------
-
-# Estagio de execucao (imagem final leve)
+# ------------------------------
+# Estágio final de execução
+# ------------------------------
 FROM openjdk:8-jre-alpine
 
-# Diretorio de trabalho final
-WORKDIR /cpmatmed
+# Define o diretório de trabalho
+WORKDIR /cpmatmed/backend
 
-# Copia o JAR gerado no estagio anterior
-COPY --from=builder /cpmatmed/backend/target/backend-0.0.1-SNAPSHOT.jar ./backend.jar
+# Copia o JAR gerado no build
+COPY --from=builder /cpmatmed/backend/target/backend-0.0.1-SNAPSHOT.jar backend.jar
 
-# Copia o script de inicializacao
-COPY start.sh ./start.sh
+# Copia o script de inicialização
+COPY start.sh start.sh
 
-# Torna o script executavel
+# Permissão de execução para o script
 RUN chmod +x start.sh
 
-# Comando para iniciar a aplicacao
+# Comando de entrada
 CMD ["./start.sh"]
