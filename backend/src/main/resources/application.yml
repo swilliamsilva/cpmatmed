@@ -15,10 +15,17 @@ management:
         include: health
 
 ---
-# Configurações carregadas apenas se nenhum perfil estiver ativo
+# Configurações do perfil "default"
 spring:
   profiles: default
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/db_cpmatmed} # Valor padrão
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/db_cpmatmed}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:senha}
+    password: ${DB_PASSWORD:CzvAukGtQLfJymGQpfKvERveaIuXnLMk}  # Senha corrigida
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect  # Dialect correto
+    hibernate:
+      ddl-auto: update   # Comportamento do schema
+    show-sql: true       # Exibe SQL no console (útil para desenvolvimento)
