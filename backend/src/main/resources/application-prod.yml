@@ -8,12 +8,13 @@ spring:
     name: cpmatmed-backend
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL}          # Injeta via variável do Railway
+    url: ${SPRING_DATASOURCE_URL}?sslmode=require # Injeta via variavel do Railway
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
-      connection-timeout: 30000            # 30 segundos (ajuste conforme necessidade)
+      connection-timeout: 60000            # 60 segundos (ajuste conforme necessidade)
+      initialization-fail-timeout: 60000
 
   jpa:
     hibernate:
@@ -22,6 +23,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc: 
+          time_zone: UTC
 
   flyway:
     enabled: true
