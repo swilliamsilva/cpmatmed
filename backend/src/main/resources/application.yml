@@ -3,7 +3,9 @@ spring:
     activate:
       on-profile: default
   application:
-    name: ${SPRING_APPLICATION_NAME:cpmatmed-backend}
+    name: cpmatmed-backend
+  profiles:
+    active: default  # Força o perfil padrão
 
 management:
   endpoint:
@@ -15,17 +17,21 @@ management:
         include: health
 
 ---
-# Configurações do perfil "default"
 spring:
   profiles: default
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/db_cpmatmed}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:CzvAukGtQLfJymGQpfKvERveaIuXnLMk}  # Senha corrigida
+    url: jdbc:postgresql://localhost:5432/db_cpmatmed
+    username: postgres
+    password: CzvAukGtQLfJymGQpfKvERveaIuXnLMk
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect  # Dialect correto
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
     hibernate:
-      ddl-auto: update   # Comportamento do schema
-    show-sql: true       # Exibe SQL no console (útil para desenvolvimento)
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    org.hibernate: DEBUG
+    org.springframework.jdbc: DEBUG
