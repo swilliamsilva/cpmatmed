@@ -1,26 +1,14 @@
-# Configurações GLOBAIS (sem perfil ativo)
+# Configurações GLOBAIS (aplicáveis a todos os perfis)
 spring:
-  config:
-    activate:
-      on-profile: default  # Define que este bloco é para o perfil 'default'
   application:
     name: ${SPRING_APPLICATION_NAME:cpmatmed-backend}
 
-management:
-  endpoint:
-    health:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: health
-
 ---
-# Configurações do perfil 'default' (quando o perfil está ativo)
+# Configurações do perfil 'default' (quando o perfil 'default' está ativo)
 spring:
   config:
     activate:
-      on-profile: default
+      on-profile: default  # Define que este bloco pertence ao perfil 'default'
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/db_cpmatmed}
     username: ${DB_USERNAME:postgres}
@@ -32,3 +20,18 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+---
+# Configurações do Management (ativas apenas se nenhum perfil estiver definido)
+spring:
+  config:
+    activate:
+      on-profile: !default  # Bloco executado apenas se NENHUM perfil estiver ativo
+management:
+  endpoint:
+    health:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
