@@ -1,14 +1,14 @@
-# Configurações GLOBAIS (aplicáveis a todos os perfis)
+# Configurações GLOBAIS (sem perfil ativo)
 spring:
   application:
     name: cpmatmed-backend
 
 ---
-# Configurações do perfil 'default' (ativação explícita)
+# Perfil 'default' (ativo se nenhum outro perfil for especificado)
 spring:
   config:
     activate:
-      on-profile: default  # Define que este bloco pertence ao perfil 'default'
+      on-profile: default
   datasource:
     url: jdbc:postgresql://localhost:5432/db_cpmatmed
     username: postgres
@@ -16,13 +16,13 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect  # Dialect específico
     hibernate:
       ddl-auto: update
     show-sql: true
 
 ---
-# Configurações de Health Check (sem perfil específico)
+# Configurações do Management (ativas em todos os perfis)
 management:
   endpoint:
     health:
