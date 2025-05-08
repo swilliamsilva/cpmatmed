@@ -4,7 +4,7 @@ spring:
     name: cpmatmed-backend
   
   datasource:
-    url: jdbc:postgresql://turntable.proxy.rlwy.net:28497/dbcpmatmed
+    url: jdbc:postgresql://turntable.proxy.rlwy.net:28497/railway
     username: postgres
     password: SAMUEL  # Considere usar variável de ambiente em produção
     driver-class-name: org.postgresql.Driver

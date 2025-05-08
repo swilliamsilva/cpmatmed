@@ -10,7 +10,7 @@ spring:
     activate:
       on-profile: default
   datasource:
-    url:  jdbc:postgresql://turntable.proxy.rlwy.net:28497/dbcpmatmed
+    url:  jdbc:postgresql://turntable.proxy.rlwy.net:28497/railway
     username: postgres
     password: "CzvAukGtQLfJymGQpfKvERveaIuXnLMk"
   jpa:
