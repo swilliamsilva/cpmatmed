@@ -1,35 +1,40 @@
 spring:
   config:
     activate:
-      on-profile: prod  # ✅ Sintaxe correta
+      on-profile: prod
+
   datasource:
-    url: ${SPRING_DATASOURCE_URL}?sslmode=require
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: jdbc:postgresql://${PostgreSQL.HOST}:${PostgreSQL.PORT}/${PostgreSQL.DATABASE}?sslmode=require
+    username: ${PostgreSQL.USER}
+    password: ${PostgreSQL.PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-timeout: 60000
       initialization-fail-timeout: 60000
+
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: validate  # Verifica se o schema está correto (não altera o banco!)
     show-sql: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL10Dialect  # Dialect versionado
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
         jdbc:
           time_zone: UTC
+
   flyway:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
     validate-on-migrate: false
+
   mvc:
     cors:
       allowed-origins: https://app.cpmatmed.com.br
+
   sql:
     init:
-      mode: never
+      mode: never  # Não inicializa dados automaticamente em produção
 
 server:
   port: 8080
