@@ -2,11 +2,11 @@ spring:
   config:
     activate:
       on-profile: prod
-
+  
   datasource:
-    url: jdbc:postgresql://${PostgreSQL.HOST}:${PostgreSQL.PORT}/${PostgreSQL.DATABASE}?sslmode=require
-    username: ${PostgreSQL.USER}
-    password: ${PostgreSQL.PASSWORD}
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=require&ssl=true  # ✅ Formato JDBC com SSL
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-timeout: 60000
@@ -14,7 +14,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate  # Verifica se o schema está correto (não altera o banco!)
+      ddl-auto: validate
     show-sql: false
     properties:
       hibernate:
@@ -34,7 +34,7 @@ spring:
 
   sql:
     init:
-      mode: never  # Não inicializa dados automaticamente em produção
+      mode: never
 
 server:
   port: 8080
