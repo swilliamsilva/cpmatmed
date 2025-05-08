@@ -30,3 +30,8 @@ spring:
   mvc:
     cors:
       allowed-origins: '*'
+  info:
+    app:
+      name: Cpmatmed
+      description: Backend do sistema Cpmatmed
+      version: 1.0.0
