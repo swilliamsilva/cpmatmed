@@ -1,23 +1,37 @@
+# application-dev.yml - Configurações de desenvolvimento local
 spring:
-  config:
-    activate:
-      on-profile: dev  # ✅ Sintaxe correta para Spring Boot 2.4+
+  application:
+    name: cpmatmed-backend
+  
   datasource:
-    url: jdbc:postgresql://localhost:5432/db_cpmatmed  # Corrigi o nome do banco (era "dbpmatmed")
+    url: jdbc:postgresql://turntable.proxy.rlwy.net:28497/db_cpmatmed
     username: postgres
-    password: SAMUEL
+    password: SAMUEL  # Considere usar variável de ambiente em produção
     driver-class-name: org.postgresql.Driver
     hikari:
-      connection-timeout: 30000
+      connection-timeout: 30000  # 30 segundos
+
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: update  # Atualiza schema automaticamente (não usar em produção)
+    show-sql: true  # Exibe SQL no console
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL10Dialect  # Dialect versionado
-        format_sql: true
-    open-in-view: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true  # Formata SQL para melhor leitura
+    open-in-view: false  # Melhor prática para evitar LazyInitializationException
+
+  # Configurações CORS
   mvc:
     cors:
-      allowed-origins: "*"
+      allowed-origins: "*"  # Permite todos os origens (ajuste para produção)
+
+# Configuração do Actuator (Health Checks)
+management:
+  endpoint:
+    health:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
