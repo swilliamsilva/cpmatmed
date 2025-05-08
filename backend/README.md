@@ -65,11 +65,11 @@ mvn spring-boot:run -Dspring-boot.run.profiles=prod
 
 Na Web pode executar usando railways em ambiente de produção.
 
-https://cpmatmed.railway.app/
-https://cpmatmed.railway.app/api/pedidos
+https://cpmatmed-backend.railway.app/
+https://cpmatmed-backend.railway.app/api/pedidos
   
 pelo postman
-GET https://cpmatmed.railway.app/api/pedidos
+GET https://cpmatmed-backend.railway.app/api/pedidos
 
 
 
