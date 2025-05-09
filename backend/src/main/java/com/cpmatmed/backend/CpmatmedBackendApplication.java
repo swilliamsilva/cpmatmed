@@ -2,10 +2,9 @@ package com.cpmatmed.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.util.Arrays;
 import java.util.Map;
@@ -21,8 +20,10 @@ public class CpmatmedBackendApplication {
         envVariables.forEach((key, value) -> System.out.println(key + ": " + value));
 
         SpringApplication app = new SpringApplication(CpmatmedBackendApplication.class);
-        app.addListeners((ApplicationListener<ApplicationPreparedEvent>) event -> {
-            ConfigurableEnvironment environment = event.getApplicationContext().getEnvironment();
+        
+        // Adicione um listener para capturar o ambiente assim que ele estiver pronto
+        app.addListeners((ApplicationListener<ApplicationEnvironmentPreparedEvent>) event -> {
+            ConfigurableEnvironment environment = event.getEnvironment();
             
             // Log das configurações do Spring
             System.out.println("\n===== CONFIGURAÇÕES DA APLICAÇÃO =====");
@@ -39,6 +40,7 @@ public class CpmatmedBackendApplication {
             System.out.println("management.endpoint.health.show-details: " + environment.getProperty("management.endpoint.health.show-details"));
             System.out.println("management.endpoint.health.enabled: " + environment.getProperty("management.endpoint.health.enabled"));
         });
+        
         app.run(args);
     }
 }
