@@ -2,7 +2,9 @@
 spring:
   application:
     name: cpmatmed-backend
-
+    
+server:
+  port: ${PORT:8080}  
 ---
 # Perfil 'default' (ativo se nenhum outro perfil for especificado)
 spring:
@@ -30,7 +32,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,info,metrics  # Lista explícita
   info:
     app:
       name: Cpmatmed
