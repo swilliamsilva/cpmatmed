@@ -41,7 +41,7 @@ management:
     web:
       base-path: /actuator
       exposure:
-        include: actuator,health,info,metrics  # Lista explícita       
+        include: health,info,metrics  # Lista explícita       
     enabled-by-default: true
   endpoint:
     health:
