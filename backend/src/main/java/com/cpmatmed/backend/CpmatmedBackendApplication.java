@@ -2,36 +2,43 @@ package com.cpmatmed.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import java.util.Arrays;
+import java.util.Map;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.cpmatmed.backend.repository")
 public class CpmatmedBackendApplication {
 
     public static void main(String[] args) {
-       //  Teste de variáveis de ambiente antes de subir o Spring
-        // Log das configurações críticas
-        System.out.println("\n===== CONFIGURAÇÕES DA APLICAÇÃO =====");
-        System.out.println("Perfis ativos: " + Arrays.toString(env.getActiveProfiles()));
-        System.out.println("server.port: " + serverPort);
-        System.out.println("management.endpoints.web.base-path: " + actuatorBasePath);
-        System.out.println("management.endpoints.web.exposure.include: " + actuatorExposedEndpoints);
-        
-        // Configurações do banco de dados
-        System.out.println("\n===== DATASOURCE CONFIG =====");
-        System.out.println("spring.datasource.url: " + env.getProperty("spring.datasource.url"));
-        System.out.println("spring.datasource.username: " + env.getProperty("spring.datasource.username"));
-        
-        // Configurações do Actuator
-        System.out.println("\n===== ACTUATOR CONFIG =====");
-        System.out.println("management.endpoint.health.show-details: " + env.getProperty("management.endpoint.health.show-details"));
-        System.out.println("management.endpoint.health.enabled: " + env.getProperty("management.endpoint.health.enabled"));
-          //  Teste de variáveis de ambiente antes de subir o Spring
-          System.out.println("SPRING_DATASOURCE_URL: " + System.getenv("SPRING_DATASOURCE_URL"));
-          System.out.println("SPRING_DATASOURCE_USERNAME: " + System.getenv("SPRING_DATASOURCE_USERNAME"));
-          System.out.println("SPRING_DATASOURCE_PASSWORD: " + System.getenv("SPRING_DATASOURCE_PASSWORD"));
+        // Log de variáveis de ambiente ANTES do Spring iniciar
+        System.out.println("\n===== VARIÁVEIS DE AMBIENTE =====");
+        Map<String, String> envVariables = System.getenv();
+        envVariables.forEach((key, value) -> System.out.println(key + ": " + value));
 
-
-        SpringApplication.run(CpmatmedBackendApplication.class, args);
+        SpringApplication app = new SpringApplication(CpmatmedBackendApplication.class);
+        app.addListeners((ApplicationListener<ApplicationPreparedEvent>) event -> {
+            ConfigurableEnvironment environment = event.getApplicationContext().getEnvironment();
+            
+            // Log das configurações do Spring
+            System.out.println("\n===== CONFIGURAÇÕES DA APLICAÇÃO =====");
+            System.out.println("Perfis ativos: " + Arrays.toString(environment.getActiveProfiles()));
+            System.out.println("server.port: " + environment.getProperty("server.port"));
+            System.out.println("management.endpoints.web.base-path: " + environment.getProperty("management.endpoints.web.base-path"));
+            System.out.println("management.endpoints.web.exposure.include: " + environment.getProperty("management.endpoints.web.exposure.include"));
+            
+            System.out.println("\n===== DATASOURCE CONFIG =====");
+            System.out.println("spring.datasource.url: " + environment.getProperty("spring.datasource.url"));
+            System.out.println("spring.datasource.username: " + environment.getProperty("spring.datasource.username"));
+            
+            System.out.println("\n===== ACTUATOR CONFIG =====");
+            System.out.println("management.endpoint.health.show-details: " + environment.getProperty("management.endpoint.health.show-details"));
+            System.out.println("management.endpoint.health.enabled: " + environment.getProperty("management.endpoint.health.enabled"));
+        });
+        app.run(args);
     }
 }
