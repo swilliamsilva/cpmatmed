@@ -36,15 +36,12 @@ spring:
     init:
       mode: never
 
-server:
-  port: 8080
-
 management:
   endpoints:
     web:
       base-path: /actuator
       exposure:
-        include: health,info,metrics  # Lista explícita       
+        include: actuator,health,info,metrics  # Lista explícita       
     enabled-by-default: true
   endpoint:
     health:

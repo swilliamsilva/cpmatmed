@@ -34,7 +34,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics  # Lista explícita
+        include: actuator,health,info,metrics  # Lista explícita
   info:
     app:
       name: Cpmatmed
