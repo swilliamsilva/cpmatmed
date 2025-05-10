@@ -5,6 +5,7 @@ spring:
 
 server:
   port: ${PORT:8080}  
+
 ---
 # Perfil 'default' (ativo se nenhum outro perfil for especificado)
 spring:
@@ -12,13 +13,13 @@ spring:
     activate:
       on-profile: default
   datasource:
-    url:  jdbc:postgresql://turntable.proxy.rlwy.net:28497/railway
+    url: jdbc:postgresql://turntable.proxy.rlwy.net:28497/railway
     username: postgres
     password: "CzvAukGtQLfJymGQpfKvERveaIuXnLMk"
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL10Dialect  # Dialect específico
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -26,13 +27,15 @@ spring:
 ---
 # Configurações do Management (ativas em todos os perfis)
 management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health,info,metrics
   endpoint:
     health:
       enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics  # Lista explícita
+      show-details: always
   info:
     app:
       name: Cpmatmed
