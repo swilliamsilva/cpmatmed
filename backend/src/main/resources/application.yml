@@ -2,20 +2,10 @@
 spring:
   application:
     name: cpmatmed-backend
-
-server:
-  port: ${PORT:8080}  
-
----
-# Perfil 'default' (ativo se nenhum outro perfil for especificado)
-spring:
-  config:
-    activate:
-      on-profile: default
   datasource:
     url: jdbc:postgresql://turntable.proxy.rlwy.net:28497/railway
     username: postgres
-    password: "CzvAukGtQLfJymGQpfKvERveaIuXnLMk"
+    password: CzvAukGtQLfJymGQpfKvERveaIuXnLMk
   jpa:
     properties:
       hibernate:
@@ -23,6 +13,12 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+server:
+  port: ${PORT:8080}
+
+logging.level.root: DEBUG
+logging.level.org.springframework: DEBUG
 
 ---
 # Configurações do Management (ativas em todos os perfis)
