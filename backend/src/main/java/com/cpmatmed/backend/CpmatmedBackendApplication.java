@@ -14,6 +14,7 @@ import java.util.Map;
 public class CpmatmedBackendApplication {
 
     public static void main(String[] args) {
+    
         // Log de variáveis de ambiente ANTES do Spring iniciar
         System.out.println("\n===== VARIÁVEIS DE AMBIENTE =====");
         Map<String, String> envVariables = System.getenv();
@@ -22,6 +23,8 @@ public class CpmatmedBackendApplication {
         SpringApplication app = new SpringApplication(CpmatmedBackendApplication.class);
         
         // Adicione um listener para capturar o ambiente assim que ele estiver pronto
+       
+       
         app.addListeners((ApplicationListener<ApplicationEnvironmentPreparedEvent>) event -> {
             ConfigurableEnvironment environment = event.getEnvironment();
             
