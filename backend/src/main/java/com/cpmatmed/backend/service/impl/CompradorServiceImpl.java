@@ -2,11 +2,11 @@ package com.cpmatmed.backend.service.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.cpmatmed.backend.dto.CompradorDTO;
+import com.cpmatmed.backend.dto.CompradorRequest;
+import com.cpmatmed.backend.exception.EntidadeNaoEncontradaException;
 import com.cpmatmed.backend.mapper.CompradorMapper;
 import com.cpmatmed.backend.repository.CompradorRepository;
 import com.cpmatmed.backend.service.CompradorService;
@@ -29,11 +29,11 @@ public class CompradorServiceImpl implements CompradorService {
     }
 
     @Override
-    public CompradorDTO salvar(CompradorDTO compradorDTO) {
+    public CompradorDTO salvar(CompradorRequest compradorRequest) {
         return CompradorMapper.toDTO(
-                compradorRepository.save(
-                        CompradorMapper.fromIdAndNome(compradorDTO.getId(), compradorDTO.getNome())
-                )
+            compradorRepository.save(
+                CompradorMapper.fromRequest(compradorRequest)
+            )
         );
     }
 
@@ -41,11 +41,14 @@ public class CompradorServiceImpl implements CompradorService {
     public CompradorDTO buscarPorId(Long id) {
         return compradorRepository.findById(id)
                 .map(CompradorMapper::toDTO)
-                .orElse(null);
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Comprador não encontrado com ID: " + id));
     }
 
     @Override
     public void deletar(Long id) {
+        if (!compradorRepository.existsById(id)) {
+            throw new EntidadeNaoEncontradaException("Comprador não encontrado com ID: " + id);
+        }
         compradorRepository.deleteById(id);
     }
 }

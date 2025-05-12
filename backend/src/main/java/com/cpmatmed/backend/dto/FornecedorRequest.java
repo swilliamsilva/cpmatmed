@@ -1,7 +1,9 @@
 package com.cpmatmed.backend.dto;
 
-public class FornecedorRequest {
+import javax.validation.constraints.NotBlank;
 
+public class FornecedorRequest {
+    @NotBlank(message = "O nome é obrigatório")
     private String nome;
 
     public FornecedorRequest() {}

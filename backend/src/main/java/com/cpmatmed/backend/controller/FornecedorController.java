@@ -1,18 +1,11 @@
 package com.cpmatmed.backend.controller;
 
 import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import javax.validation.Valid;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.cpmatmed.backend.dto.FornecedorDTO;
+import com.cpmatmed.backend.dto.FornecedorRequest;
 import com.cpmatmed.backend.service.FornecedorService;
 
 @RestController
@@ -22,7 +15,6 @@ public class FornecedorController {
 
     private final FornecedorService fornecedorService;
 
-    //  Injeção via construtor
     public FornecedorController(FornecedorService fornecedorService) {
         this.fornecedorService = fornecedorService;
     }
@@ -34,8 +26,14 @@ public class FornecedorController {
     }
 
     @PostMapping
-    public ResponseEntity<FornecedorDTO> salvar(@Valid @RequestBody FornecedorDTO fornecedorDTO) {
-        FornecedorDTO salvo = fornecedorService.salvar(fornecedorDTO);
+    public ResponseEntity<FornecedorDTO> salvar(@Valid @RequestBody FornecedorRequest request) {
+        FornecedorDTO salvo = fornecedorService.salvar(request);
         return ResponseEntity.ok(salvo);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        fornecedorService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }
