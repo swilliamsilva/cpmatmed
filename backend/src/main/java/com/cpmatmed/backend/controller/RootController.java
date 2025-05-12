@@ -8,6 +8,6 @@ public class RootController {
 
     @GetMapping("/")
     public String root() {
-        return "API CPMATMED ativa!";
+        return "Bem vindo! A API CPMATMED ativa! ";
     }
 }

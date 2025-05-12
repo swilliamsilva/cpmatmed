@@ -65,12 +65,14 @@ mvn spring-boot:run -Dspring-boot.run.profiles=prod
 
 Na Web pode executar usando railways em ambiente de produção.
 
-https://cpmatmed-backend.railway.app/
-https://cpmatmed-backend.railway.app/api/pedidos
+
+https://cpmatmed-backend-production.up.railway.app/
+https://cpmatmed-backend-production.up.railway.app/actuator
+
+https://cpmatmed-backend-production.up.railway.app/api/pedidos
   
 pelo postman
-GET https://cpmatmed-backend.railway.app/api/pedidos
-
+GET https://cpmatmed-backend-production.up.railway.app/api/pedidos
 
 
 
@@ -113,22 +115,49 @@ Durante o desenvolvimento, o CORS está aberto para qualquer origem:
 Para produção, configure especificamente o domínio:
 @CrossOrigin(origins = "http://localhost:4200")
 
-# Exemplo de Resposta: GET /api/pedidos
+# Exemplo de Resposta: POST /api/...
 
-[
-  {
-    "id": 1,
-    "nomeComprador": "João Silva",
-    "nomeFornecedor": "Farmácia XYZ",
-    "totalProdutos": 10,
-    "valorTotal": 250.0
-  },
-  {
-    "id": 2,
-    "nomeComprador": "Maria Souza",
-    "nomeFornecedor": "Medicamentos ABC",
-    "totalProdutos": 5,
-    "valorTotal": 120.0
-  }
-]
+Primeiro faça o POST de um comprador
+https://cpmatmed-backend-production.up.railway.app/api/compradores
+{
+  "nome": "Dra. Ana Clara"
+}
+
+Depois faça  POST de um fornecedor
+https://cpmatmed-backend-production.up.railway.app/api/fornecedores
+{
+  "nome": "Clínica São Rafael"
+}
+
+E um POST do produto
+https://cpmatmed-backend-production.up.railway.app/api/produtos
+
+{
+  "id": null,
+  "nome": "Álcool 70%",
+  "descricao": "Frasco de álcool 70% com 500ml",
+  "quantidade": 10,
+  "precoUnitario": 4.50,
+  "valorTotal": 45.00,
+  "fornecedorId": 1
+}
+
+Para um pedido por vez.
+https://cpmatmed-backend-production.up.railway.app/api/pedidos
+{
+  "compradorId": 1,
+  "fornecedorId": 2,
+  "produtos": [
+    {
+      "produtoId": 5,
+      "quantidade": 3
+    },
+    {
+      "produtoId": 8,
+      "quantidade": 1
+    }
+  ]
+}
+
+
 

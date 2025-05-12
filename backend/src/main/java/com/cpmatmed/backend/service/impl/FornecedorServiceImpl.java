@@ -24,4 +24,13 @@ public class FornecedorServiceImpl implements FornecedorService {
     public List<FornecedorDTO> listarTodos() {
         return FornecedorMapper.toDTOList(fornecedorRepository.findAll());
     }
+
+    @Override
+    public FornecedorDTO salvar(FornecedorDTO fornecedorDTO) {
+        return FornecedorMapper.toDTO(
+            fornecedorRepository.save(
+                FornecedorMapper.fromIdAndNome(fornecedorDTO.getId(), fornecedorDTO.getNome())
+            )
+        );
+    }
 }

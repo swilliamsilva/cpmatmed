@@ -1,8 +1,12 @@
 package com.cpmatmed.backend.dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class FornecedorDTO {
 
     private Long id;
+
+    @NotBlank(message = "O nome do fornecedor é obrigatório")
     private String nome;
 
     public FornecedorDTO() {}

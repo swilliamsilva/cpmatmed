@@ -6,4 +6,7 @@ import com.cpmatmed.backend.dto.FornecedorDTO;
 
 public interface FornecedorService {
     List<FornecedorDTO> listarTodos();
+
+    FornecedorDTO salvar(FornecedorDTO fornecedorDTO);
+
 }
