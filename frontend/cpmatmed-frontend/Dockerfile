@@ -1,10 +1,10 @@
-FROM node:14-alpine
+FROM node:14-alpine  # Node.js 14 + npm pré-instalado
 
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
 COPY . .
-RUN npm run build
+RUN npm run build --configuration production
 
 ENV PORT=3000
 EXPOSE $PORT
