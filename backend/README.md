@@ -152,15 +152,15 @@ Para um pedido por vez.
 https://cpmatmed-backend-production.up.railway.app/api/pedidos
 {
   "compradorId": 1,
-  "fornecedorId": 2,
-  "produtos": [
+  "fornecedorId": 1,
+  "itens": [
     {
-      "produtoId": 5,
-      "quantidade": 3
+      "produtoId": 1,
+      "quantidade": 2
     },
     {
-      "produtoId": 8,
-      "quantidade": 1
+      "produtoId": 2,
+      "quantidade": 3
     }
   ]
 }
