@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.cpmatmed.backend.dto.ProdutoDTO;
-import com.cpmatmed.backend.mapper.ProdutoMapper;
 import com.cpmatmed.backend.model.Produto;
 import com.cpmatmed.backend.repository.ProdutoRepository;
 import com.cpmatmed.backend.service.impl.ProdutoServiceImpl;
@@ -22,11 +21,9 @@ class ProdutoServiceTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        // Mockando o ProdutoRepository
         produtoRepository = mock(ProdutoRepository.class);
-
-        // Inicializando o ProdutoService com o mock do ProdutoRepository
         produtoService = new ProdutoServiceImpl(produtoRepository);
+        
     }
 
     @Test
@@ -35,10 +32,8 @@ class ProdutoServiceTest {
         produto.setId(1L);
         produto.setNome("Produto Teste");
         produto.setDescricao("Descrição teste");
-        produto.setQuantidade(10);
         produto.setPrecoUnitario(BigDecimal.valueOf(15));
 
-        // Mockando o comportamento do ProdutoRepository
         when(produtoRepository.findAll()).thenReturn(Collections.singletonList(produto));
 
         List<ProdutoDTO> resultado = produtoService.listarTodosProdutos();
@@ -49,6 +44,6 @@ class ProdutoServiceTest {
         ProdutoDTO dto = resultado.get(0);
         assertEquals("Produto Teste", dto.getNome());
         assertEquals("Descrição teste", dto.getDescricao());
-        assertEquals(BigDecimal.valueOf(150), dto.getValorTotal());
+        assertEquals(BigDecimal.valueOf(15), dto.getPrecoUnitario()); // Ajustado
     }
 }

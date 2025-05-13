@@ -55,7 +55,12 @@ O projeto está dividido em duas aplicações independentes:
 3. Rode a aplicação (`BackendApplication.java`), pela IDE.
 4. A API será exposta em: `http://localhost:8080`.
 5. Para executar
-# Com Maven:
+
+# Para rodar os teste:
+
+mvn clean install -Dspring.profiles.active=test
+
+# Para executar como desenvolvimento:
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 mvn test -Dspring.profiles.active=test
  Ou com JAR:
@@ -67,6 +72,7 @@ Na Web pode executar usando railways em ambiente de produção.
 
 
 https://cpmatmed-backend-production.up.railway.app/
+
 https://cpmatmed-backend-production.up.railway.app/actuator
 
 https://cpmatmed-backend-production.up.railway.app/api/pedidos
