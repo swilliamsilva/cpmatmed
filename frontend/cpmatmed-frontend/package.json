@@ -4,7 +4,7 @@
     "scripts": {
         "ng": "ng",
         "start": "serve -s dist/cpmatmed-frontend -l $PORT",
-        "build": "set NODE_OPTIONS=--openssl-legacy-provider && ng build --configuration production",
+        "build": "export NODE_OPTIONS=--openssl-legacy-provider && ng build --configuration production",
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e"
