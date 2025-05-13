@@ -1,1 +1,1 @@
-web: serve -s dist/cpmatmed-frontend -l $PORT
+web: npm start
