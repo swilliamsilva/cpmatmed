@@ -1,4 +1,4 @@
-FROM node:14-alpine  # Node.js 14 + npm pré-instalado
+FROM node:14-alpine
 
 WORKDIR /app
 COPY package*.json ./
